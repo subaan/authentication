@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -107,6 +108,11 @@ public class Domain {
     @DateTimeFormat(style = "M-")
     @Temporal(TemporalType.TIMESTAMP)
     private Date signupDate;
+
+    /** The domain last modified date */
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedDate;
 
     /** The domain approved date*/
     @Temporal(TemporalType.TIMESTAMP)
@@ -333,6 +339,22 @@ public class Domain {
      */
     public void setSignupDate(Date signupDate) {
         this.signupDate = signupDate;
+    }
+
+    /**
+     * Get the updated date.
+     * @return the user updated date.
+     */
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    /**
+     * Set the user updated date.
+     * @param updatedDate - user updated date.
+     */
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     /**

@@ -46,7 +46,11 @@ public class DomainVO {
     /** The phone number */
     private String phoneNumber;
 
+    /** The domain status*/
+    private String status;
+
     /**
+
      * Get the domain ID.
      * @return the domain ID
      */
@@ -248,5 +252,22 @@ public class DomainVO {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    /**
+     * Get the user status.
+     * @return the user status
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * Set the user status.
+     * @param status - the user status.
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 
 }

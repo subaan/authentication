@@ -1,114 +1,39 @@
-package com.example.model;
+package com.example.vo;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import javax.persistence.Temporal;
 import java.util.Date;
 
 /**
- * Created by Abdul on 18/5/16.
+ * Created by Abdul on 19/5/16.
  */
-@Entity
-public class User {
+public class UserVO {
 
-    /** Auto generated ID */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     /** The name of user */
-    @NotNull
-    @Size(min = 1, max = 20)
     private String username;
 
     /** The password of user */
     private String password;
 
     /** The unique email ID of user */
-    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
-            +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
-            +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-            message="{invalid.email}")
-    @Column(unique=true)
     private String emailId;
 
     /** The unique email ID of user */
-    @ManyToOne
-    @JoinColumn(name = "domain_id")
-    private Domain domain;
+    private Long domainId;
 
     /** The status of the user */
-    @Enumerated(EnumType.STRING)
-    private UserStatus status;
-
-    /**
-     *  The UserStatus in enum values.
-     */
-    public enum UserStatus {
-        /** The user active state*/
-        ENABLED,
-        /** The user in active state*/
-        DISABLED
-    }
+    private String status;
 
     /** The type of the user */
-    @Enumerated(EnumType.STRING)
-    private UserType type;
-
-    /**
-     *  The UserType in enum values.
-     */
-    public enum UserType {
-        /** The super admin user of application */
-        SUPER_ADMIN,
-        /** The root domain admin user */
-        DOMAIN_ADMIN,
-        /** The domain admin user */
-        DOMAIN_USER
-    }
+    private String type;
 
     /** The boolean value to represent soft delete */
-    private boolean deleted = false;
+    private boolean deleted;
 
     /** The date of user created*/
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
     /** The date of user updated*/
-    @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
-
-    /**
-     * Get the user ID.
-     * @return the user ID
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Set the user ID.
-     * @param id - the User ID.
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * Get the name of user.
@@ -159,26 +84,26 @@ public class User {
     }
 
     /**
-     * Get the domain of user.
-     * @return the user domain.
+     * Get the domain id of user.
+     * @return the user domain id.
      */
-    public Domain getDomain() {
-        return domain;
+    public Long getDomainId() {
+        return domainId;
     }
 
     /**
-     * Set the domain.
-     * @param domain - the domain.
+     * Set the domain id.
+     * @param domainId - the domain id.
      */
-    public void setDomain(Domain domain) {
-        this.domain = domain;
+    public void setDomain(Long domainId) {
+        this.domainId = domainId;
     }
 
     /**
      * Get the user status.
      * @return the user status.
      */
-    public UserStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -186,7 +111,7 @@ public class User {
      * Set the status of the user.
      * @param status - the User status.
      */
-    public void setStatus(UserStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -194,7 +119,7 @@ public class User {
      * Get the type of user.
      * @return the user type.
      */
-    public UserType getType() {
+    public String getType() {
         return type;
     }
 
@@ -202,7 +127,7 @@ public class User {
      * Set the type of the user.
      * @param type - the User type.
      */
-    public void setType(UserType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -253,6 +178,4 @@ public class User {
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
-
-
 }

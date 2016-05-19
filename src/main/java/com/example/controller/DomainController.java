@@ -70,47 +70,9 @@ public class DomainController {
     }
 
     /**
-     * This method is used to update domain.
-     * @param domain the domain request object.
-     * @param id the user ID.
-     */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseStatus(HttpStatus.CREATED)
-    public String update(@RequestBody Domain domain, @PathVariable("id") Long id) {
-        //Get existing domain
-        Domain existingDomain = domainRepository.findOne(id);
-        //Update new values
-        existingDomain.setAliasName(domain.getAliasName());
-        existingDomain.setOrganisationName(domain.getOrganisationName());
-        existingDomain.setEmailId(domain.getEmailId());
-        existingDomain.setBillingEmailId(domain.getBillingEmailId());
-        existingDomain.setStreetAddress(domain.getStreetAddress());
-        existingDomain.setCity(domain.getCity());
-        existingDomain.setState(domain.getState());
-        existingDomain.setCountry(domain.getCountry());
-        existingDomain.setZipCode(domain.getZipCode());
-        existingDomain.setPhoneNumber(domain.getPhoneNumber());
-        existingDomain.setSignupDate(new Date());
-        domainRepository.save(existingDomain);
-
-        return "{\"result\":\"success\"}";
-    }
-
-    /**
-     * This method is used to delete the domain.
-     * @param id the domain ID.
-     * @throws Exception
-     */
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") Long id) throws Exception {
-        domainRepository.delete(id);
-    }
-
-    /**
      * Add new domain.
      * @param  domainVO domainVO object
-     * @return success/failure of the recovery.
+     * @return success/failure of create.
      * @throws Exception default exception.
      */
     @RequestMapping(method = RequestMethod.POST, value = "/create",
@@ -148,5 +110,65 @@ public class DomainController {
 
         return "{\"result\":\"success\"}";
     }
+
+    /**
+     * This method is used to update domain.
+     * @param domainVO the domainVO request object.
+     * @param id the domain ID.
+     * @return success/failure of the update.
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseStatus(HttpStatus.CREATED)
+    public String update(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) {
+        //Get existing domain
+        Domain existingDomain = domainRepository.findOne(id);
+        //Update new values
+        existingDomain.setAliasName(domainVO.getAliasName());
+        existingDomain.setOrganisationName(domainVO.getOrganisationName());
+        existingDomain.setEmailId(domainVO.getEmailId());
+        existingDomain.setBillingEmailId(domainVO.getBillingEmailId());
+        existingDomain.setStreetAddress(domainVO.getStreetAddress());
+        existingDomain.setCity(domainVO.getCity());
+        existingDomain.setState(domainVO.getState());
+        existingDomain.setCountry(domainVO.getCountry());
+        existingDomain.setZipCode(domainVO.getZipCode());
+        existingDomain.setPhoneNumber(domainVO.getPhoneNumber());
+        existingDomain.setStatus(Domain.DomainStatus.valueOf(domainVO.getStatus()));
+        existingDomain.setUpdatedDate(new Date());
+        domainRepository.save(existingDomain);
+
+        return "{\"result\":\"success\"}";
+    }
+
+    /**
+     * This method is used to update the domain status.
+     * @param id the domain ID.
+     * @return success/failure of the update.
+     */
+    @RequestMapping(value = "/approve/{id}", method = RequestMethod.PUT,
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseStatus(HttpStatus.CREATED)
+    public String approveDoamin(@PathVariable("id") Long id) {
+        //Get existing domain
+        Domain existingDomain = domainRepository.findOne(id);
+        //Update status to 'APPROVAL_PENDING' to 'ACTIVE'
+        existingDomain.setStatus(Domain.DomainStatus.ACTIVE);
+        existingDomain.setUpdatedDate(new Date());
+        domainRepository.save(existingDomain);
+
+        return "{\"result\":\"success\"}";
+    }
+
+    /**
+     * This method is used to delete the domain.
+     * @param id the domain ID.
+     * @throws Exception
+     */
+    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") Long id) throws Exception {
+        domainRepository.delete(id);
+    }
+
 
 }
