@@ -1,0 +1,11 @@
+demo.iml
+demo.ipr
+demo.iws
+gradlew
+gradlew.bat
+/build/
+/bin/
+/gradle/
+/.gradle/
+/.idea/
+/.settings/
