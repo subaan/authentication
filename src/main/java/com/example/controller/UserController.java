@@ -1,28 +1,35 @@
 package com.example.controller;
 
+import com.example.constants.GenericConstants;
 import com.example.model.User;
 import com.example.repository.DomainRepository;
-import com.example.repository.UserRepository;
+import com.example.service.UserService;
+import com.example.util.domain.vo.PagingAndSorting;
+import com.example.util.web.CRUDController;
 import com.example.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Abdul on 19/5/16.
  */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends CRUDController {
 
     /**
-     * Auto wired UserRepository.
+     * Auto wired userService.
      */
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     /**
      * Auto wired domainRepository.
@@ -33,42 +40,57 @@ public class UserController {
     /**
      * This method is used to return the user list.
      * @return the user list.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Iterable<User> list() {
-        return userRepository.findAll();
+    public Iterable<User> list() throws  Exception {
+        return userService.findAll();
+    }
+
+    @Override
+    @RequestMapping(value="/list", method = RequestMethod.GET)
+    public List<User> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
+                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        PagingAndSorting page = new PagingAndSorting(range, sortBy, User.class);
+        Page<User> pageResponse = userService.findAll(page);
+        response.setHeader(GenericConstants.CONTENT_RANGE_HEADER, page.getPageHeaderValue(pageResponse));
+        return pageResponse.getContent();
     }
 
     /**
      * This method is used to return the user by ID.
      * @param id the user ID.
      * @return the user.
+     * @throws Exception default exception.
      */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public User getDomain(@PathVariable("id") Long id) {
-        return userRepository.findOne(id);
+    public User getDomain(@PathVariable("id") Long id) throws  Exception {
+        return userService.find(id);
     }
 
     /**
      * This method is used to create new user.
      * @param user the user request object.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody User user) {
-        userRepository.save(user);
+    public void create(@RequestBody User user) throws  Exception {
+        userService.create(user);
     }
 
     /**
      * This method is used to create new user by domain.
      * @param userVO the userVO request object.
      * @return the success or failure message as JSON.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public String createUser(@RequestBody UserVO userVO) {
+    public String createUser(@RequestBody UserVO userVO) throws  Exception {
 
         //Create new user
         User user = new User();
@@ -80,7 +102,7 @@ public class UserController {
         user.setType(User.UserType.valueOf(userVO.getType()));
         user.setCreatedDate(new Date());
 
-        userRepository.save(user);
+        userService.create(user);
 
         return "{\"result\":\"success\"}";
     }
@@ -90,13 +112,14 @@ public class UserController {
      * @param userVO the userVO request object.
      * @param id the user ID.
      * @return the success or failure message as JSON.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public String update(@RequestBody UserVO userVO, @PathVariable("id") Long id) {
+    public String update(@RequestBody UserVO userVO, @PathVariable("id") Long id) throws Exception {
         //Get existing user
-        User existinguser = userRepository.findOne(id);
+        User existinguser = userService.find(id);
         //Update new values
         existinguser.setUsername(userVO.getUsername());
         existinguser.setPassword(userVO.getPassword());
@@ -104,7 +127,7 @@ public class UserController {
         existinguser.setStatus(User.UserStatus.valueOf(userVO.getStatus()));
         existinguser.setType(User.UserType.valueOf(userVO.getType()));
         existinguser.setUpdatedDate(new Date());
-        userRepository.save(existinguser);
+        userService.update(existinguser);
 
         return "{\"result\":\"success\"}";
     }
@@ -116,7 +139,7 @@ public class UserController {
      */
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") Long id) throws Exception {
-        userRepository.delete(id);
+        userService.delete(id);
     }
 
     /**
@@ -128,10 +151,10 @@ public class UserController {
     public void deleteUser(@PathVariable("id") Long id) throws Exception {
 
         //Get existing user
-        User user = userRepository.findOne(id);
+        User user = userService.find(id);
         //Soft delete the user
         user.setDeleted(true);
-        userRepository.save(user);
+        userService.update(user);
     }
 
 }

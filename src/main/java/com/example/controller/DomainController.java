@@ -1,23 +1,24 @@
 package com.example.controller;
 
+import com.example.constants.GenericConstants;
 import com.example.model.Domain;
 import com.example.model.User;
-import com.example.repository.DomainRepository;
 import com.example.service.DomainService;
+import com.example.util.domain.vo.PagingAndSorting;
+import com.example.util.web.CRUDController;
 import com.example.vo.DomainVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.DOMImplementation;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Abdul on 19/5/16.
@@ -25,13 +26,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/domain")
 @Component
-public class DomainController {
-
-    /**
-     * Auto wired domainRepository.
-     */
-    @Autowired
-    private DomainRepository domainRepository;
+public class DomainController extends CRUDController {
 
     /**
      * Auto wired domainService.
@@ -42,31 +37,45 @@ public class DomainController {
     /**
      * This method is used to return the domain list.
      * @return the domain list.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Iterable<Domain> list() {
-        return domainRepository.findAll();
+    public Iterable<Domain> list() throws Exception {
+        return domainService.findAll();
+    }
+
+    @Override
+    @RequestMapping(value="/list", method = RequestMethod.GET)
+    public List<Domain> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
+                              HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        PagingAndSorting page = new PagingAndSorting(range, sortBy, Domain.class);
+        Page<Domain> pageResponse = domainService.findAll(page);
+        response.setHeader(GenericConstants.CONTENT_RANGE_HEADER, page.getPageHeaderValue(pageResponse));
+        return pageResponse.getContent();
     }
 
     /**
      * This method is used to return the domain by ID.
      * @param id the domain ID.
      * @return the domain list.
+     * @throws Exception default exception.
      */
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public Domain getDomain(@PathVariable("id") Long id) {
-        return domainRepository.findOne(id);
+    public Domain getDomain(@PathVariable("id") Long id) throws Exception {
+        return domainService.find(id);
     }
 
     /**
      * This method is used to create new domain.
      * @param domain the domain request object.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody Domain domain) {
-        domainRepository.save(domain);
+    public void create(@RequestBody Domain domain) throws Exception {
+        domainService.create(domain);
     }
 
     /**
@@ -116,13 +125,14 @@ public class DomainController {
      * @param domainVO the domainVO request object.
      * @param id the domain ID.
      * @return success/failure of the update.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public String update(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) {
+    public String update(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) throws  Exception {
         //Get existing domain
-        Domain existingDomain = domainRepository.findOne(id);
+        Domain existingDomain = domainService.find(id);
         //Update new values
         existingDomain.setAliasName(domainVO.getAliasName());
         existingDomain.setOrganisationName(domainVO.getOrganisationName());
@@ -136,7 +146,7 @@ public class DomainController {
         existingDomain.setPhoneNumber(domainVO.getPhoneNumber());
         existingDomain.setStatus(Domain.DomainStatus.valueOf(domainVO.getStatus()));
         existingDomain.setUpdatedDate(new Date());
-        domainRepository.save(existingDomain);
+        domainService.update(existingDomain);
 
         return "{\"result\":\"success\"}";
     }
@@ -145,17 +155,18 @@ public class DomainController {
      * This method is used to update the domain status.
      * @param id the domain ID.
      * @return success/failure of the update.
+     * @throws Exception default exception.
      */
     @RequestMapping(value = "/approve/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public String approveDoamin(@PathVariable("id") Long id) {
+    public String approveDoamin(@PathVariable("id") Long id) throws  Exception {
         //Get existing domain
-        Domain existingDomain = domainRepository.findOne(id);
+        Domain existingDomain = domainService.find(id);
         //Update status to 'APPROVAL_PENDING' to 'ACTIVE'
         existingDomain.setStatus(Domain.DomainStatus.ACTIVE);
         existingDomain.setUpdatedDate(new Date());
-        domainRepository.save(existingDomain);
+        domainService.update(existingDomain);
 
         return "{\"result\":\"success\"}";
     }
@@ -167,7 +178,7 @@ public class DomainController {
      */
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") Long id) throws Exception {
-        domainRepository.delete(id);
+        domainService.delete(id);
     }
 
 
