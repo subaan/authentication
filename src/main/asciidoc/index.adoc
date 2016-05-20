@@ -73,6 +73,61 @@ include::{snippets}/domain-list-by-page/http-request.adoc[]
 
 include::{snippets}/domain-list-by-page/http-response.adoc[]
 
+[[resource-domain-detail]]
+
+=== Getting domain
+A `GET` request to get domain details.
+
+include::{snippets}/domain-get-detail/response-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/domain-get-detail/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/domain-get-detail/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/domain-get-detail/http-response.adoc[]
+
+[[resource-domain-create]]
+
+=== Creating domain
+A `POST` request to create new domain.
+
+include::{snippets}/domain-create/response-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/domain-create/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/domain-create/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/domain-create/http-response.adoc[]
+
+=== Deleting a domain
+A `DELETE` request to delete a domain.
+
+include::{snippets}/domain-remove/response-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/domain-remove/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/domain-remove/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/domain-remove/http-response.adoc[]
+
 
 
 

@@ -6,6 +6,7 @@ import com.example.model.User;
 import com.example.service.DomainService;
 import com.example.util.domain.vo.PagingAndSorting;
 import com.example.util.web.CRUDController;
+import com.example.util.web.SortingUtil;
 import com.example.vo.DomainVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.DOMImplementation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/domain")
 @Component
-public class DomainController extends CRUDController {
+public class DomainController extends CRUDController<Domain> {
 
     /**
      * Auto wired domainService.
@@ -62,6 +62,9 @@ public class DomainController extends CRUDController {
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<Domain> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //Set default values if null
+        range = SortingUtil.defaultIfNullorEmpty(range, "0-10");
+        sortBy = SortingUtil.defaultIfNullorEmpty(sortBy, "id");
 
         PagingAndSorting page = new PagingAndSorting(range, sortBy, Domain.class);
         Page<Domain> pageResponse = domainService.findAll(page);
@@ -76,8 +79,9 @@ public class DomainController extends CRUDController {
      * @return the domain list.
      * @throws Exception default exception.
      */
+    @Override
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public Domain getDomain(@PathVariable("id") Long id) throws Exception {
+    public Domain read(@PathVariable("id") Long id) throws Exception {
         return domainService.find(id);
     }
 
@@ -85,13 +89,12 @@ public class DomainController extends CRUDController {
      * This method is used to create new domain.
      *
      * @param domain the domain request object.
+     * @return the success/ failure message.
      * @throws Exception default exception.
      */
-    @RequestMapping(value = "", method = RequestMethod.POST,
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody Domain domain) throws Exception {
-        domainService.create(domain);
+    @Override
+    public Domain create(@RequestBody Domain domain) throws Exception {
+        return domainService.create(domain);
     }
 
     /**
@@ -103,7 +106,7 @@ public class DomainController extends CRUDController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/create",
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public String createDomain(@RequestBody DomainVO domainVO) throws Exception {
 
@@ -147,8 +150,8 @@ public class DomainController extends CRUDController {
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseStatus(HttpStatus.CREATED)
-    public String update(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) throws  Exception {
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Domain update(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) throws  Exception {
         //Get existing domain
         Domain existingDomain = domainService.find(id);
         //Update new values
@@ -164,9 +167,9 @@ public class DomainController extends CRUDController {
         existingDomain.setPhoneNumber(domainVO.getPhoneNumber());
         existingDomain.setStatus(Domain.DomainStatus.valueOf(domainVO.getStatus()));
         existingDomain.setUpdatedDate(new Date());
-        domainService.update(existingDomain);
+        return domainService.update(existingDomain);
 
-        return "{\"result\":\"success\"}";
+//        return "{\"result\":\"success\"}";
     }
 
     /**
@@ -196,7 +199,7 @@ public class DomainController extends CRUDController {
      * @param id the domain ID.
      * @throws Exception
      */
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    @Override
     public void delete(@PathVariable("id") Long id) throws Exception {
         domainService.delete(id);
     }

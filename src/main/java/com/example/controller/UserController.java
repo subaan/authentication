@@ -6,6 +6,7 @@ import com.example.repository.DomainRepository;
 import com.example.service.UserService;
 import com.example.util.domain.vo.PagingAndSorting;
 import com.example.util.web.CRUDController;
+import com.example.util.web.SortingUtil;
 import com.example.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController extends CRUDController {
+public class UserController extends CRUDController<User> {
 
     /**
      * Auto wired userService.
@@ -65,6 +66,9 @@ public class UserController extends CRUDController {
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<User> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
                              HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //Set default value if null
+        range = SortingUtil.defaultIfNullorEmpty(range, "0-10");
+        sortBy = SortingUtil.defaultIfNullorEmpty(sortBy, "id");
 
         PagingAndSorting page = new PagingAndSorting(range, sortBy, User.class);
         Page<User> pageResponse = userService.findAll(page);
@@ -78,8 +82,8 @@ public class UserController extends CRUDController {
      * @return the user.
      * @throws Exception default exception.
      */
-    @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public User getDomain(@PathVariable("id") Long id) throws  Exception {
+    @Override
+    public User read(@PathVariable("id") Long id) throws  Exception {
         return userService.find(id);
     }
 
@@ -92,8 +96,8 @@ public class UserController extends CRUDController {
     @RequestMapping(value = "", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody User user) throws  Exception {
-        userService.create(user);
+    public User create(@RequestBody User user) throws  Exception {
+        return userService.create(user);
     }
 
     /**
@@ -133,7 +137,7 @@ public class UserController extends CRUDController {
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public String update(@RequestBody UserVO userVO, @PathVariable("id") Long id) throws Exception {
         //Get existing user
         User existinguser = userService.find(id);
@@ -155,7 +159,7 @@ public class UserController extends CRUDController {
      * @param id the user ID.
      * @throws Exception
      */
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    @Override
     public void delete(@PathVariable("id") Long id) throws Exception {
         userService.delete(id);
     }

@@ -19,10 +19,9 @@ import java.util.List;
 /**
  * Generic Controller to handle REST and common actions for Application.
  *
- * @param <R> HAL JSON Resource.
- * @param <E> Entity which is related to the operation.
+ * @param <T> Entity which is related to the operation.
  */
-public class CRUDController<R, E> {
+public class CRUDController<T> {
 
     /**
      * Rest action to create an entity from json object.
@@ -36,7 +35,7 @@ public class CRUDController<R, E> {
             consumes = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public R create(@RequestBody E t) throws Exception {
+    public T create(@RequestBody T t) throws Exception {
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -54,7 +53,7 @@ public class CRUDController<R, E> {
             consumes = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseStatus(HttpStatus.ACCEPTED)
     @ResponseBody
-    public R update(@RequestBody E t, @PathVariable("id") Long id) throws Exception {
+    public T update(@RequestBody T t, @PathVariable("id") Long id) throws Exception {
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -82,7 +81,7 @@ public class CRUDController<R, E> {
             produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public R read(@PathVariable("id") Long id) throws Exception {
+    public T read(@PathVariable("id") Long id) throws Exception {
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -104,7 +103,7 @@ public class CRUDController<R, E> {
             produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<R>  list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
+    public List<T>  list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
                         HttpServletRequest request, HttpServletResponse response) throws Exception {
         return null;
     }
