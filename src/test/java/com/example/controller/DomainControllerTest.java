@@ -111,28 +111,8 @@ public class DomainControllerTest {
         try {
             BDDMockito.when(mockDomainService.findAll())
                     .thenReturn(buildMockDomainList());
-
-            this.document.snippets(
-                    responseFields(
-                            fieldWithPath("[].id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
-                            fieldWithPath("[].aliasName").description("Aliasname of the domain. e.g. 'Root' "),
-                            fieldWithPath("[].organisationName").description("The organisation name of the domain. e.g 'Apptronix' "),
-                            fieldWithPath("[].emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
-                            fieldWithPath("[].billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
-                            fieldWithPath("[].streetAddress").description("The organisation street address in detail "),
-                            fieldWithPath("[].city").description("The organisation city"),
-                            fieldWithPath("[].state").description("The organisation state "),
-                            fieldWithPath("[].country").description("The organisation country "),
-                            fieldWithPath("[].zipCode").description("The organisation zip code. e.g. '435234' "),
-                            fieldWithPath("[].phoneNumber").description("The organisation phone number. e.g. '9789654567'"),
-                            fieldWithPath("[].status").description("The status of domain. APPROVAL_PENDING - Initial state when done signup, ACTIVE - The domain active state," +
-                                    " SUSPENDED - The domain suspended state, CLOSED - The domain dead state.'"),
-                            fieldWithPath("[].signupDate").type("Date")
-                                    .description("The sign up date. e.g. 'MAR 11 2016 12:35:05'"),
-                            fieldWithPath("[].updatedDate").type("Date").description("The domain updated date. e.g. 'MAR 15 2016 12:35:05'"),
-                            fieldWithPath("[].approvedDate").type("Date").description("The domain approved date. e.g. 'MAR 13 2016 12:35:05'")
-                    )
-            );
+            //To set domain response fields
+            this.setDomainListResponseFields();
 
             this.mockMvc.perform(
                     get("/domain").accept(MediaType.APPLICATION_JSON)
@@ -143,6 +123,57 @@ public class DomainControllerTest {
             Assert.fail("Unexpected Exception");
         }
 
+    }
+
+    /**
+     * Test the domain list by page.
+     */
+    @Test
+    public void listByPage() throws Exception {
+        try {
+            BDDMockito.when(mockDomainService.findAll(any()))
+                    .thenReturn(buildMockDomainListPage());
+            //To set domain response fields
+            this.setDomainListResponseFields();
+
+            this.mockMvc.perform(
+                    get("/domain/list?sortBy=id").accept(MediaType.APPLICATION_JSON)
+                    .header("Range", "0-1")
+            ).andExpect(status().isOk()).andDo(document("index"));;
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            Assert.fail("Unexpected Exception");
+        }
+
+    }
+
+    /**
+     * This method is used to set the domain response fields for documentation.
+     */
+    private void setDomainListResponseFields () {
+
+        this.document.snippets(
+                responseFields(
+                        fieldWithPath("[].id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
+                        fieldWithPath("[].aliasName").description("Aliasname of the domain. e.g. 'Root' "),
+                        fieldWithPath("[].organisationName").description("The organisation name of the domain. e.g 'Apptronix' "),
+                        fieldWithPath("[].emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
+                        fieldWithPath("[].billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
+                        fieldWithPath("[].streetAddress").description("The organisation street address in detail "),
+                        fieldWithPath("[].city").description("The organisation city"),
+                        fieldWithPath("[].state").description("The organisation state "),
+                        fieldWithPath("[].country").description("The organisation country "),
+                        fieldWithPath("[].zipCode").description("The organisation zip code. e.g. '435234' "),
+                        fieldWithPath("[].phoneNumber").description("The organisation phone number. e.g. '9789654567'"),
+                        fieldWithPath("[].status").description("The status of domain. APPROVAL_PENDING - Initial state when done signup, ACTIVE - The domain active state," +
+                                " SUSPENDED - The domain suspended state, CLOSED - The domain dead state.'"),
+                        fieldWithPath("[].signupDate").type("Date")
+                                .description("The sign up date. e.g. 'MAR 11 2016 12:35:05'"),
+                        fieldWithPath("[].updatedDate").type("Date").description("The domain updated date. e.g. 'MAR 15 2016 12:35:05'"),
+                        fieldWithPath("[].approvedDate").type("Date").description("The domain approved date. e.g. 'MAR 13 2016 12:35:05'")
+                )
+        );
     }
 
     /**
@@ -183,8 +214,19 @@ public class DomainControllerTest {
         domainY.setSignupDate(new Date());
         domains.add(domainY);
 
-//        Page<Domain> page = new PageImpl<Domain>(domains);
         return domains;
+    }
+
+    /**
+     * Build mock pagination of domain.
+     * @return the domain list page.
+     */
+    private Page<Domain> buildMockDomainListPage() {
+
+        List domainList = this.buildMockDomainList();
+        Page<Domain> pageDoamins = new PageImpl<Domain>(domainList);
+
+        return pageDoamins;
     }
 
 }

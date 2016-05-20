@@ -104,7 +104,7 @@ public class CRUDController<R, E> {
             produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<R> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
+    public List<R>  list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
                         HttpServletRequest request, HttpServletResponse response) throws Exception {
         return null;
     }

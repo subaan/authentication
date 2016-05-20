@@ -39,6 +39,7 @@ public class UserController extends CRUDController {
 
     /**
      * This method is used to return the user list.
+     *
      * @return the user list.
      * @throws Exception default exception.
      */
@@ -47,6 +48,19 @@ public class UserController extends CRUDController {
         return userService.findAll();
     }
 
+    /**
+     * This method is used to list the user by page range and sort by field.
+     *
+     * @param sortBy the sort field name
+     *        example request param: sort(+name) - for Ascending order
+     *                               sort(-name) - for Descending order
+     * @param range the page range
+     *        example request header: Range: items=0-9
+     * @param request the http request object
+     * @param response to http response object
+     * @return the domain list by page
+     * @throws Exception the default exception.
+     */
     @Override
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<User> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
@@ -71,6 +85,7 @@ public class UserController extends CRUDController {
 
     /**
      * This method is used to create new user.
+     *
      * @param user the user request object.
      * @throws Exception default exception.
      */
@@ -83,6 +98,7 @@ public class UserController extends CRUDController {
 
     /**
      * This method is used to create new user by domain.
+     *
      * @param userVO the userVO request object.
      * @return the success or failure message as JSON.
      * @throws Exception default exception.
@@ -109,6 +125,7 @@ public class UserController extends CRUDController {
 
     /**
      * This method is used to update user.
+     *
      * @param userVO the userVO request object.
      * @param id the user ID.
      * @return the success or failure message as JSON.
@@ -134,6 +151,7 @@ public class UserController extends CRUDController {
 
     /**
      * This method is used to delete the user from DB.
+     *
      * @param id the user ID.
      * @throws Exception
      */
@@ -144,6 +162,7 @@ public class UserController extends CRUDController {
 
     /**
      * This method is used to delete the user. This is soft delete.
+     *
      * @param id the user ID.
      * @throws Exception
      */

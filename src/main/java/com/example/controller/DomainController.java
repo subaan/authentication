@@ -36,6 +36,7 @@ public class DomainController extends CRUDController {
 
     /**
      * This method is used to return the domain list.
+     *
      * @return the domain list.
      * @throws Exception default exception.
      */
@@ -44,6 +45,19 @@ public class DomainController extends CRUDController {
         return domainService.findAll();
     }
 
+    /**
+     * This method is used to list the domain by page range and sort by field.
+     *
+     * @param sortBy the sort field name
+     *        example request param: sort(+name) - for Ascending order
+     *                               sort(-name) - for Descending order
+     * @param range the page range
+     *        example request header: Range: items=0-9
+     * @param request the http request object
+     * @param response to http response object
+     * @return the domain list by page
+     * @throws Exception the default exception.
+     */
     @Override
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<Domain> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
@@ -57,6 +71,7 @@ public class DomainController extends CRUDController {
 
     /**
      * This method is used to return the domain by ID.
+     *
      * @param id the domain ID.
      * @return the domain list.
      * @throws Exception default exception.
@@ -68,6 +83,7 @@ public class DomainController extends CRUDController {
 
     /**
      * This method is used to create new domain.
+     *
      * @param domain the domain request object.
      * @throws Exception default exception.
      */
@@ -80,6 +96,7 @@ public class DomainController extends CRUDController {
 
     /**
      * Add new domain.
+     *
      * @param  domainVO domainVO object
      * @return success/failure of create.
      * @throws Exception default exception.
@@ -122,6 +139,7 @@ public class DomainController extends CRUDController {
 
     /**
      * This method is used to update domain.
+     *
      * @param domainVO the domainVO request object.
      * @param id the domain ID.
      * @return success/failure of the update.
@@ -153,6 +171,7 @@ public class DomainController extends CRUDController {
 
     /**
      * This method is used to update the domain status.
+     *
      * @param id the domain ID.
      * @return success/failure of the update.
      * @throws Exception default exception.
@@ -160,7 +179,7 @@ public class DomainController extends CRUDController {
     @RequestMapping(value = "/approve/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public String approveDoamin(@PathVariable("id") Long id) throws  Exception {
+    public String approve(@PathVariable("id") Long id) throws  Exception {
         //Get existing domain
         Domain existingDomain = domainService.find(id);
         //Update status to 'APPROVAL_PENDING' to 'ACTIVE'
@@ -173,6 +192,7 @@ public class DomainController extends CRUDController {
 
     /**
      * This method is used to delete the domain.
+     *
      * @param id the domain ID.
      * @throws Exception
      */

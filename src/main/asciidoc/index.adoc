@@ -57,21 +57,21 @@ The Domain resource is used to create, modify and list domain.
 [[resource-domain-list]]
 
 === Listing domain
-A `GET` request lists all of the domain.
+A `GET` request pagination lists of the domain.
 
-include::{snippets}/domain-list/response-fields.adoc[]
+include::{snippets}/domain-list-by-page/response-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/domain-list/curl-request.adoc[]
+include::{snippets}/domain-list-by-page/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/domain-list/http-request.adoc[]
+include::{snippets}/domain-list-by-page/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/domain-list/http-response.adoc[]
+include::{snippets}/domain-list-by-page/http-response.adoc[]
 
 
 
