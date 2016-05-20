@@ -1,4 +1,4 @@
-= Getting Started Guide
+= Person-service Getting Started Guide
 Abdul;
 doctype: book
 
@@ -53,26 +53,22 @@ use of HTTP status codes.
 | The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.
 |===
 
-The Domain resource is used to create, modify and list domain.
-[[resource-domain-list]]
+The Person resource is used to create, modify and list people.
+[[resource-people-list]]
 
-=== Listing domain
-A `GET` request lists all of the domain.
+=== Listing people
+A `GET` request lists all of the service's people.
 
-include::{snippets}/domain-list/response-fields.adoc[]
-
-==== Example curl request
-
-include::{snippets}/domain-list/curl-request.adoc[]
+include::{snippets}/list-people/response-fields.adoc[]
 
 ==== Example request
 
-include::{snippets}/domain-list/http-request.adoc[]
+include::{snippets}/list-people/curl-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/domain-list/http-response.adoc[]
-
+include::{snippets}/list-people/http-response.adoc[]
+The snippets placeholder is replaced by Spring Rest Doc to the build/generated-snippets folder.
 
 
 
