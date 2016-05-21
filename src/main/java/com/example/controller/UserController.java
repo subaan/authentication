@@ -135,10 +135,10 @@ public class UserController extends CRUDController<User> {
      * @return the success or failure message as JSON.
      * @throws Exception default exception.
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String update(@RequestBody UserVO userVO, @PathVariable("id") Long id) throws Exception {
+    public String updateUser(@RequestBody UserVO userVO, @PathVariable("id") Long id) throws Exception {
         //Get existing user
         User existinguser = userService.find(id);
         //Update new values
@@ -151,6 +151,20 @@ public class UserController extends CRUDController<User> {
         userService.update(existinguser);
 
         return "{\"result\":\"success\"}";
+    }
+
+    /**
+     * This method is used to update the user.
+     *
+     * @param user the user request object.
+     * @param id - Id of the entity to update
+     * @return the user
+     * @throws Exception the default exception.
+     */
+    @Override
+    public User update(@RequestBody User user, @PathVariable("id") Long id) throws  Exception {
+        //TODO:  Need to add update logic. For testing this will be used
+        return userService.update(user);
     }
 
     /**

@@ -113,6 +113,23 @@ include::{snippets}/domain-create/http-request.adoc[]
 
 include::{snippets}/domain-create/http-response.adoc[]
 
+=== Updating domain
+A `PATCH` request to update a domain.
+
+include::{snippets}/domain-update/request-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/domain-update/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/domain-update/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/domain-update/http-response.adoc[]
+
 === Deleting a domain
 A `DELETE` request to delete a domain.
 
@@ -184,6 +201,24 @@ include::{snippets}/user-create/http-request.adoc[]
 ==== Example response
 
 include::{snippets}/user-create/http-response.adoc[]
+
+=== Updating user
+
+A `PATCH` request to update a user.
+
+include::{snippets}/user-update/request-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/user-update/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/user-update/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/user-update/http-response.adoc[]
 
 === Deleting a user
 

@@ -43,9 +43,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -188,14 +186,7 @@ public class UserControllerTest {
             BDDMockito.when(mockUserService.create(any(User.class)))
                     .thenReturn(mockUser);
 
-            JsonObject requestUser = Json.createObjectBuilder()
-                    .add("username", "username-X")
-                    .add("password", "passw0rd")
-                    .add("emailId", "username-x@example.com")
-                    .add("domain", this.buildMockDomainRequest())
-                    .add("status", "ENABLED")
-                    .add("type", "DOMAIN_USER")
-                    .build();
+            JsonObject requestUser = this.buildMockUserRequest();
 
             //To set user request fields
             this.setUserRequestFields();
@@ -207,6 +198,35 @@ public class UserControllerTest {
                     .andExpect(status().isCreated())
                     .andDo(document("index"));
 
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            Assert.fail("Unexpected Exception");
+        }
+    }
+
+    /**
+     * Test the user update.
+     */
+    @Test
+    public void update() {
+        try {
+            User mockUser = this.buildMockUser();
+            mockUser.setUpdatedDate(new Date());
+            BDDMockito.when(mockUserService.update(any(User.class)))
+                    .thenReturn(mockUser);
+
+            JsonObject requestUser = this.buildMockUserRequest();
+
+            //To set user request fields
+            this.setUserRequestFields();
+
+            this.mockMvc.perform(patch("/user/"+mockUser.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestUser.toString())
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isAccepted())
+                    .andDo(document("index"));
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -332,7 +352,7 @@ public class UserControllerTest {
     }
 
     /**
-     * To build the user mock request data.
+     * To build the domain mock request data.
      */
     private JsonObject buildMockDomainRequest() {
 
@@ -350,6 +370,25 @@ public class UserControllerTest {
                 .add("phoneNumber", "9879678546")
                 .build();
         return requestDomain;
+
+    }
+
+
+    /**
+     * To build the user mock request data.
+     */
+    private JsonObject buildMockUserRequest() {
+
+        JsonObject requestUser = Json.createObjectBuilder()
+                .add("username", "username-X")
+                .add("password", "passw0rd")
+                .add("emailId", "username-x@example.com")
+                .add("domain", this.buildMockDomainRequest())
+                .add("status", "ENABLED")
+                .add("type", "DOMAIN_USER")
+                .build();
+
+        return requestUser;
 
     }
 

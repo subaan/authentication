@@ -148,10 +148,10 @@ public class DomainController extends CRUDController<Domain> {
      * @return success/failure of the update.
      * @throws Exception default exception.
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Domain update(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) throws  Exception {
+    public String updateDomain(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) throws  Exception {
         //Get existing domain
         Domain existingDomain = domainService.find(id);
         //Update new values
@@ -167,10 +167,24 @@ public class DomainController extends CRUDController<Domain> {
         existingDomain.setPhoneNumber(domainVO.getPhoneNumber());
         existingDomain.setStatus(Domain.DomainStatus.valueOf(domainVO.getStatus()));
         existingDomain.setUpdatedDate(new Date());
-        return domainService.update(existingDomain);
+        domainService.update(existingDomain);
 
-//        return "{\"result\":\"success\"}";
+        return "{\"result\":\"success\"}";
     }
+
+    /**
+     * This method is used to update domain.
+     *
+     * @param domain the domain request object.
+     * @param id the domain ID.
+     * @return success/failure of the update.
+     * @throws Exception default exception.
+     */
+     @Override
+     public  Domain update(@RequestBody Domain domain, @PathVariable("id") Long id) throws  Exception {
+         //TODO:  Need to add update logic. For testing this will be used
+         return domainService.update(domain);
+     }
 
     /**
      * This method is used to update the domain status.

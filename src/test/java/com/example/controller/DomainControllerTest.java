@@ -237,7 +237,7 @@ public class DomainControllerTest {
             //To set domain request fields
             this.setDomainRequestFields();
 
-            this.mockMvc.perform(put("/domain/"+mockDomain.getId())
+            this.mockMvc.perform(patch("/domain/"+mockDomain.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestDomain.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -246,7 +246,7 @@ public class DomainControllerTest {
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
-//            Assert.fail("Unexpected Exception");
+            Assert.fail("Unexpected Exception");
         }
     }
 
