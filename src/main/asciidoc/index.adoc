@@ -53,6 +53,8 @@ use of HTTP status codes.
 | The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.
 |===
 
+== Domain
+
 The Domain resource is used to create, modify and list domain.
 [[resource-domain-list]]
 
@@ -97,7 +99,7 @@ include::{snippets}/domain-get-detail/http-response.adoc[]
 === Creating domain
 A `POST` request to create new domain.
 
-include::{snippets}/domain-create/response-fields.adoc[]
+include::{snippets}/domain-create/request-fields.adoc[]
 
 ==== Example curl request
 
@@ -114,8 +116,6 @@ include::{snippets}/domain-create/http-response.adoc[]
 === Deleting a domain
 A `DELETE` request to delete a domain.
 
-include::{snippets}/domain-remove/response-fields.adoc[]
-
 ==== Example curl request
 
 include::{snippets}/domain-remove/curl-request.adoc[]
@@ -127,6 +127,79 @@ include::{snippets}/domain-remove/http-request.adoc[]
 ==== Example response
 
 include::{snippets}/domain-remove/http-response.adoc[]
+
+== User
+
+The User resource is used to create, modify and list user.
+[[resource-user-list]]
+
+=== Listing user
+A `GET` request pagination lists of the user.
+
+include::{snippets}/user-list-by-page/response-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/user-list-by-page/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/user-list-by-page/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/user-list-by-page/http-response.adoc[]
+
+=== Getting user
+A `GET` request to get user details.
+
+include::{snippets}/user-get-detail/response-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/user-get-detail/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/user-get-detail/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/user-get-detail/http-response.adoc[]
+
+=== Creating user
+
+A `POST` request to create new domain.
+
+include::{snippets}/user-create/request-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/user-create/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/user-create/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/user-create/http-response.adoc[]
+
+=== Deleting a user
+
+A `DELETE` request to delete a user.
+
+==== Example curl request
+
+include::{snippets}/user-remove/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/user-remove/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/user-remove/http-response.adoc[]
 
 
 

@@ -1,8 +1,5 @@
 package com.example.controller;
 
-/**
- * Created by Abdul on 18/5/16.
- */
 import com.example.Application;
 import com.example.model.Person;
 import com.example.repository.PersonRepository;
@@ -30,6 +27,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Created by Abdul on 18/5/16.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration

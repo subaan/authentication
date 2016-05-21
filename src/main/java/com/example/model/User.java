@@ -1,5 +1,6 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -36,6 +37,7 @@ public class User {
     private String username;
 
     /** The password of user */
+    @JsonIgnore
     private String password;
 
     /** The unique email ID of user */
@@ -61,7 +63,7 @@ public class User {
     public enum UserStatus {
         /** The user active state*/
         ENABLED,
-        /** The user in active state*/
+        /** The user in active state */
         DISABLED
     }
 
@@ -82,6 +84,7 @@ public class User {
     }
 
     /** The boolean value to represent soft delete */
+    @JsonIgnore
     private boolean deleted = false;
 
     /** The date of user created*/

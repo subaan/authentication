@@ -6,9 +6,7 @@ package com.example.controller;
 import com.example.Application;
 import com.example.model.Domain;
 import com.example.model.Person;
-import com.example.repository.PersonRepository;
 import com.example.service.DomainService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +23,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -63,13 +61,7 @@ public class DomainControllerTest {
     private WebApplicationContext context;
 
     @Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
     private DomainService mockDomainService;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private MockMvc mockMvc;
 
@@ -80,7 +72,7 @@ public class DomainControllerTest {
      * DomainControllerTestConfig for all object mocking.
      */
     @Configuration
-    public static class CloudControllerTestConfig {
+    public static class DomainControllerTestConfig {
 
         /**
          * Service DomainService.
@@ -284,7 +276,7 @@ public class DomainControllerTest {
         this.document.snippets(
                 responseFields(
                         fieldWithPath("[].id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
-                        fieldWithPath("[].aliasName").description("Aliasname of the domain. e.g. 'Root' "),
+                        fieldWithPath("[].aliasName").description("Alias name of the domain. e.g. 'Root' "),
                         fieldWithPath("[].organisationName").description("The organisation name of the domain. e.g 'Apptronix' "),
                         fieldWithPath("[].emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
                         fieldWithPath("[].billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
@@ -312,7 +304,7 @@ public class DomainControllerTest {
         this.document.snippets(
                 responseFields(
                         fieldWithPath("id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
-                        fieldWithPath("aliasName").description("Aliasname of the domain. e.g. 'Root' "),
+                        fieldWithPath("aliasName").description("Alias name of the domain. e.g. 'Root' "),
                         fieldWithPath("organisationName").description("The organisation name of the domain. e.g 'Apptronix' "),
                         fieldWithPath("emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
                         fieldWithPath("billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
@@ -339,7 +331,7 @@ public class DomainControllerTest {
 
         this.document.snippets(
                 requestFields(
-                        fieldWithPath("aliasName").description("Aliasname of the domain. e.g. 'Root' "),
+                        fieldWithPath("aliasName").attributes(Attributes.key("constraints").value("Must not be null. Must not be empty")).description("Alias name of the domain. e.g. 'Root' "),
                         fieldWithPath("organisationName").description("The organisation name of the domain. e.g 'Apptronix' "),
                         fieldWithPath("emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
                         fieldWithPath("billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
@@ -359,7 +351,7 @@ public class DomainControllerTest {
      * Build mock data.
      * @return the domain object.
      */
-    private Domain buildMockDomain() {
+    public Domain buildMockDomain() {
 
         Domain domain = new Domain();
         domain.setId(1L);
@@ -378,6 +370,7 @@ public class DomainControllerTest {
 
         return domain;
     }
+
     /**
      * Build mock list of domain.
      * @return mock list of domain.
