@@ -14,7 +14,7 @@ public class DomainVO {
     private String aliasName;
 
     /** The user name  */
-    private String userName;
+    private String username;
 
     /** The user password  */
     private String password;
@@ -86,15 +86,15 @@ public class DomainVO {
      * Get the name of user.
      * @return the user name.
      */
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     /**
      * Set the name.
-     * @param userName - the User name
+     * @param username - the User name
      */
-    public void setUserName(String userName) { this.userName = userName; }
+    public void setUsername(String username) { this.username = username; }
 
     /**
      * Get the user password.

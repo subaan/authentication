@@ -48,15 +48,24 @@ repositories {
 
 configurations {
     providedRuntime
+    //compile.exclude module: "spring-boot-starter-tomcat"
 }
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    //compile "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
-    compile "com.h2database:h2"
-    compile "org.glassfish:javax.json:1.0.4"
-    compile "javax.json:javax.json-api:1.0"
+    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+
+    compile "com.h2database:h2" //In memory database
+    compile "org.glassfish:javax.json:1.0.4" //Json builder
+    compile "javax.json:javax.json-api:1.0" //Json builder
+    
+    compile "com.google.guava:guava:19.0"
+    compile('net.sf.ehcache:ehcache-core:2.6.9') {
+        exclude group: 'commons-logging'
+    }
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${springRestDocsVersion}"

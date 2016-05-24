@@ -127,7 +127,7 @@ public class DomainController extends CRUDController<Domain> {
 
         //Set user values
         User user = new User();
-        user.setUsername(domainVO.getUserName());
+        user.setUsername(domainVO.getUsername());
         user.setPassword(domainVO.getPassword());
         user.setEmailId(domainVO.getEmailId());
         user.setDomain(domain);

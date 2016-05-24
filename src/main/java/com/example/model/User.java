@@ -96,6 +96,21 @@ public class User {
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
+    
+    /**
+     * Parameterized constructor.
+     */
+    public User() {
+       super();
+    }
+    
+    /**
+     * Parameterized constructor.
+     * @param username to set
+     */
+    public User(String username) {
+        this.username = username;
+    }
 
     /**
      * Get the user ID.
