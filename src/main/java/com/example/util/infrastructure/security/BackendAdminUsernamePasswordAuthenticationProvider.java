@@ -34,10 +34,6 @@ public class BackendAdminUsernamePasswordAuthenticationProvider implements Authe
         @SuppressWarnings("unchecked")
         Optional<String> password = (Optional<String>) authentication.getCredentials();
 
-
-        System.out.println("username: ******* "+username.get());
-        System.out.println("password:******** "+password.get());
-
         if (credentialsMissing(username, password) || credentialsInvalid(username, password)) {
             throw new BadCredentialsException(INVALID_BACKEND_ADMIN_CREDENTIALS);
         }
