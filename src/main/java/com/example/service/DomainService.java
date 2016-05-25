@@ -12,6 +12,14 @@ import org.springframework.stereotype.Service;
 public interface DomainService extends CRUDService<Domain> {
 
     /**
+     * This method find domain with specified domain name.
+     *
+     * @param name the domain name
+     * @return Domain.
+     */
+    Domain findByAliasName(String name);
+
+    /**
      * This method creates new domain.
      *
      * @param domain the domain object

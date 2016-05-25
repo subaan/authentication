@@ -1,7 +1,10 @@
 package com.example.util.infrastructure.security;
 
+import com.example.model.Domain;
 import com.example.model.User;
+import com.example.service.DomainService;
 import com.example.service.UserService;
+import com.example.util.exceptions.DomainNameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,6 +15,10 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.google.common.base.Optional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Domain username password authentication provider.
@@ -26,6 +33,9 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DomainService domainService;
 
     /** Admin username. */
     @Value("${backend.admin.username}")
@@ -57,21 +67,49 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
             throw new BadCredentialsException("Invalid User Credentials");
         }
         String userName = username.get();
+        ServletRequestAttributes attr = (ServletRequestAttributes)
+                RequestContextHolder.currentRequestAttributes();
+        HttpSession session = attr.getRequest().getSession(true);
+        String domainName = session.getAttribute("domainName").toString();
 
         if(backendAdminUsername.equals(userName)) {
             if(!backendAdminPassword.equals(password.get())) {
                 throw new BadCredentialsException("Invalid User Credentials");
             }
         } else {
-            User user = userService.findByUsername(userName);
-            if(user == null || !user.getUsername().equals(userName)) {
-                throw new UsernameNotFoundException("Username '" + username.get() + "' not found");
+
+            if(domainName == null || domainName.equals("")) {
+                throw new DomainNameNotFoundException("Domain name not specified");
+            } else {
+
+                //Check user under the domain
+                domainName = domainName.replace("\"", "");
+                Domain domain = domainService.findByAliasName(domainName);
+                System.out.println("DB domain is:  "+domain);
+                if(domain == null) {
+                    throw new DomainNameNotFoundException("Domain with name '" + domainName + "' not found");
+                }
+
+                //Check username
+                User user = userService.findByUsername(userName);
+                if(user == null || !user.getUsername().equals(userName)) {
+                    throw new UsernameNotFoundException("User with name '" + username.get() + "' not found");
+                }
+
+                //Check user under the current domain
+                user = userService.findByUsernameAndDomain(userName, domain);
+                if(user == null || !user.getUsername().equals(userName)) {
+                    throw new UsernameNotFoundException("User with name '" + username.get() + "' not under the domain '"
+                    + domain.getAliasName() +"'");
+                }
+
+                //Check the credentials
+                user = userService.findByUsernameAndPasswordAndDomain(userName, password.get(), domain);
+                if(user == null) {
+                    throw new BadCredentialsException("Invalid User Credentials !");
+                }
             }
 
-            user = userService.findByUsernameAndPassword(userName, password.get());
-            if(user == null) {
-                throw new BadCredentialsException("Invalid User Credentials");
-            }
         }
 
         AuthenticationWithToken resultOfAuthentication = externalServiceAuthenticator.authenticate(userName, password.get());

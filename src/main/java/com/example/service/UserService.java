@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.model.Domain;
 import com.example.model.User;
 import com.example.util.domain.CRUDService;
 
@@ -17,6 +18,15 @@ public interface UserService extends CRUDService<User> {
     User findByUsername(String  username);
 
     /**
+     * This method find user with specified user name.
+     *
+     * @param username the username.
+     * @param domain the domain object.
+     * @return User.
+     */
+    User findByUsernameAndDomain(String username, Domain domain);
+
+    /**
      * This method find user with specified user name and password.
      *
      * @param username the username.
@@ -24,5 +34,15 @@ public interface UserService extends CRUDService<User> {
      * @return User.
      */
     User findByUsernameAndPassword(String  username, String password);
+
+    /**
+     * This method find user with specified user name,password and domain.
+     *
+     * @param username the username.
+     * @param password the password.
+     * @param domain the domain object.
+     * @return User.
+     */
+    User findByUsernameAndPasswordAndDomain(String username, String password, Domain domain);
 
 }

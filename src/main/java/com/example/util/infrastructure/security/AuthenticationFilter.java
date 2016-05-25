@@ -1,20 +1,25 @@
 package com.example.util.infrastructure.security;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.example.constants.GenericConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
@@ -47,9 +52,8 @@ public class AuthenticationFilter extends GenericFilterBean {
     /** Authentication manager attribute. */
     private AuthenticationManager authenticationManager;
 
+    /** External service authenticator. */
     private ExternalServiceAuthenticator externalServiceAuthenticator;
-
-    private AuthenticationProvider authenticationProvider;
 
     /**
      * Parameterized constructor.
@@ -64,15 +68,39 @@ public class AuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = asHttp(request);
         HttpServletResponse httpResponse = asHttp(response);
 
-        Optional<String> username = Optional.fromNullable(httpRequest.getHeader("X-Auth-Username"));
-        Optional<String> password = Optional.fromNullable(httpRequest.getHeader("X-Auth-Password"));
-        Optional<String> token = Optional.fromNullable(httpRequest.getHeader("X-Auth-Token"));
+        Optional<String> username = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_USERNAME));
+        Optional<String> password = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_PASSWORD));
+        Optional<String> token = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN));
+
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 
         try {
             if (postToAuthenticate(httpRequest, resourcePath)) {
                 LOGGER.info("Trying to authenticate user {} by X-Auth-Username method", username);
+
+                StringBuffer jb = new StringBuffer();
+                String line = null;
+                try {
+                    BufferedReader reader = request.getReader();
+                    while ((line = reader.readLine()) != null)
+                        jb.append(line);
+                } catch (Exception e) { /*report an error*/ }
+                String domainName = "";
+                if(jb.toString() != null && !jb.toString().isEmpty()) {
+
+                    // Convert String to Json Object.
+                    JsonReader jsonReader = Json.createReader(new StringReader(jb.toString()));
+                    JsonObject object = jsonReader.readObject();
+
+                    domainName = object.get(GenericConstants.DOMAIN_NAME) == null ? "" :
+                            object.get(GenericConstants.DOMAIN_NAME).toString();
+
+                }
+
+                // Set domain name to session
+                HttpSession session = httpRequest.getSession(true);
+                session.setAttribute("domainName", domainName);
                 processUsernamePasswordAuthentication(httpResponse, username, password);
                 return;
             }
@@ -157,8 +185,8 @@ public class AuthenticationFilter extends GenericFilterBean {
         httpResponse.setStatus(HttpServletResponse.SC_OK);
         TokenResponse tokenResponse = new TokenResponse(resultOfAuthentication.getDetails().toString());
         String tokenJsonResponse = new ObjectMapper().writeValueAsString(tokenResponse);
-        httpResponse.addHeader("Content-Type", "application/json");
-        httpResponse.addHeader("X-Auth-Token", resultOfAuthentication.getDetails().toString());
+        httpResponse.addHeader(GenericConstants.CONTENT_TYPE_HEADER, GenericConstants.CONTENT_TYPE_JSON);
+        httpResponse.addHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN, resultOfAuthentication.getDetails().toString());
         httpResponse.getWriter().print(tokenJsonResponse);
     }
 

@@ -57,6 +57,11 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
+    public Domain findByAliasName(String name) {
+        return domainRepository.findByAliasName(name);
+    }
+
+    @Override
     public void createDomain(Domain domain, User user) throws Exception {
 
         System.out.println(" Domain create ");

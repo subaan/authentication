@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.constants.GenericConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,8 +67,8 @@ public class ManagementEndpointAuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = asHttp(request);
         HttpServletResponse httpResponse = asHttp(response);
 
-        Optional<String> username = Optional.fromNullable(httpRequest.getHeader("X-Auth-Username"));
-        Optional<String> password = Optional.fromNullable(httpRequest.getHeader("X-Auth-Password"));
+        Optional<String> username = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_USERNAME));
+        Optional<String> password = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_PASSWORD));
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 

@@ -55,12 +55,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String  username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findFirstByUsername(username);
+    }
+
+    @Override
+    public User findByUsernameAndDomain(String username, Domain domain) {
+        return userRepository.findByUsernameAndDomain(username, domain);
     }
 
     @Override
     public User findByUsernameAndPassword(String  username, String password) {
         return userRepository.findByUsernameAndPassword(username, password);
+    }
+
+    @Override
+    public User findByUsernameAndPasswordAndDomain(String username, String password, Domain domain) {
+        return userRepository.findByUsernameAndPasswordAndDomain(username, password, domain);
     }
 
 }
