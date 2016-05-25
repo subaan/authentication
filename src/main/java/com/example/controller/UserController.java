@@ -5,6 +5,7 @@ import com.example.model.User;
 import com.example.repository.DomainRepository;
 import com.example.service.UserService;
 import com.example.util.domain.vo.PagingAndSorting;
+import com.example.util.web.ApiController;
 import com.example.util.web.CRUDController;
 import com.example.util.web.SortingUtil;
 import com.example.vo.UserVO;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController extends CRUDController<User> {
+public class UserController extends CRUDController<User> implements ApiController {
 
     /**
      * Auto wired userService.
@@ -64,7 +65,7 @@ public class UserController extends CRUDController<User> {
      */
     @Override
     @RequestMapping(value="/list", method = RequestMethod.GET)
-    public List<User> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
+    public List<User> list(@RequestParam String sortBy, @RequestHeader(value = RANGE) String range,
                              HttpServletRequest request, HttpServletResponse response) throws Exception {
         //Set default value if null
         range = SortingUtil.defaultIfNullorEmpty(range, "0-10");
@@ -83,7 +84,7 @@ public class UserController extends CRUDController<User> {
      * @throws Exception default exception.
      */
     @Override
-    public User read(@PathVariable("id") Long id) throws  Exception {
+    public User read(@PathVariable(PATH_ID) Long id) throws  Exception {
         return userService.find(id);
     }
 
@@ -138,7 +139,7 @@ public class UserController extends CRUDController<User> {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String updateUser(@RequestBody UserVO userVO, @PathVariable("id") Long id) throws Exception {
+    public String updateUser(@RequestBody UserVO userVO, @PathVariable(PATH_ID) Long id) throws Exception {
         //Get existing user
         User existinguser = userService.find(id);
         //Update new values
@@ -162,7 +163,7 @@ public class UserController extends CRUDController<User> {
      * @throws Exception the default exception.
      */
     @Override
-    public User update(@RequestBody User user, @PathVariable("id") Long id) throws  Exception {
+    public User update(@RequestBody User user, @PathVariable(PATH_ID) Long id) throws  Exception {
         //TODO:  Need to add update logic. For testing this will be used
         return userService.update(user);
     }
@@ -174,7 +175,7 @@ public class UserController extends CRUDController<User> {
      * @throws Exception
      */
     @Override
-    public void delete(@PathVariable("id") Long id) throws Exception {
+    public void delete(@PathVariable(PATH_ID) Long id) throws Exception {
         userService.delete(id);
     }
 
@@ -185,7 +186,7 @@ public class UserController extends CRUDController<User> {
      * @throws Exception
      */
     @RequestMapping(value="/delete/{id}", method = RequestMethod.DELETE)
-    public void deleteUser(@PathVariable("id") Long id) throws Exception {
+    public void deleteUser(@PathVariable(PATH_ID) Long id) throws Exception {
 
         //Get existing user
         User user = userService.find(id);

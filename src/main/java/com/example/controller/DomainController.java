@@ -6,6 +6,7 @@ import com.example.model.Domain;
 import com.example.model.User;
 import com.example.service.DomainService;
 import com.example.util.domain.vo.PagingAndSorting;
+import com.example.util.web.ApiController;
 import com.example.util.web.CRUDController;
 import com.example.util.web.SortingUtil;
 import com.example.vo.DomainVO;
@@ -29,7 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/domain")
 @Component
-public class DomainController extends CRUDController<Domain> {
+public class DomainController extends CRUDController<Domain> implements ApiController {
 
     /** Logger constant. */
     private static final Logger LOGGER = LoggerFactory.getLogger(DomainController.class);
@@ -66,7 +67,7 @@ public class DomainController extends CRUDController<Domain> {
      */
     @Override
     @RequestMapping(value="/list", method = RequestMethod.GET)
-    public List<Domain> list(@RequestParam String sortBy, @RequestHeader(value = "Range") String range,
+    public List<Domain> list(@RequestParam String sortBy, @RequestHeader(value = RANGE) String range,
                               HttpServletRequest request, HttpServletResponse response) throws Exception {
         //Set default values if null
         range = SortingUtil.defaultIfNullorEmpty(range, "0-10");
@@ -99,7 +100,7 @@ public class DomainController extends CRUDController<Domain> {
      */
     @Override
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public Domain read(@PathVariable("id") Long id) throws Exception {
+    public Domain read(@PathVariable(PATH_ID) Long id) throws Exception {
         return domainService.find(id);
     }
 
@@ -169,7 +170,7 @@ public class DomainController extends CRUDController<Domain> {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String updateDomain(@RequestBody DomainVO domainVO, @PathVariable("id") Long id) throws  Exception {
+    public String updateDomain(@RequestBody DomainVO domainVO, @PathVariable(PATH_ID) Long id) throws  Exception {
         //Get existing domain
         Domain existingDomain = domainService.find(id);
         //Update new values
@@ -199,7 +200,7 @@ public class DomainController extends CRUDController<Domain> {
      * @throws Exception default exception.
      */
      @Override
-     public  Domain update(@RequestBody Domain domain, @PathVariable("id") Long id) throws  Exception {
+     public  Domain update(@RequestBody Domain domain, @PathVariable(PATH_ID) Long id) throws  Exception {
          //TODO:  Need to add update logic. For testing this will be used
          return domainService.update(domain);
      }
@@ -214,7 +215,7 @@ public class DomainController extends CRUDController<Domain> {
     @RequestMapping(value = "/approve/{id}", method = RequestMethod.PUT,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public String approve(@PathVariable("id") Long id) throws  Exception {
+    public String approve(@PathVariable(PATH_ID) Long id) throws  Exception {
         //Get existing domain
         Domain existingDomain = domainService.find(id);
         //Update status to 'APPROVAL_PENDING' to 'ACTIVE'
@@ -232,7 +233,7 @@ public class DomainController extends CRUDController<Domain> {
      * @throws Exception
      */
     @Override
-    public void delete(@PathVariable("id") Long id) throws Exception {
+    public void delete(@PathVariable(PATH_ID) Long id) throws Exception {
         domainService.delete(id);
     }
 
