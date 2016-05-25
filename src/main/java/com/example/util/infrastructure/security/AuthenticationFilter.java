@@ -106,7 +106,7 @@ public class AuthenticationFilter extends GenericFilterBean {
             }
 
             if (token.isPresent()) {
-                LOGGER.info("Trying to authenticate user by X-Auth-Token method. Token: {}", token);
+                LOGGER.debug("Trying to authenticate user by X-Auth-Token method. Token: {}", token);
                 processTokenAuthentication(token);
             }
 

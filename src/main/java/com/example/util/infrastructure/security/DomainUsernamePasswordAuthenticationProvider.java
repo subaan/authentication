@@ -72,6 +72,8 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
         HttpSession session = attr.getRequest().getSession(true);
         String domainName = session.getAttribute("domainName").toString();
 
+        User user = new User();
+
         if(backendAdminUsername.equals(userName)) {
             if(!backendAdminPassword.equals(password.get())) {
                 throw new BadCredentialsException("Invalid User Credentials");
@@ -91,7 +93,7 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
                 }
 
                 //Check username
-                User user = userService.findByUsername(userName);
+                user = userService.findByUsername(userName);
                 if(user == null || !user.getUsername().equals(userName)) {
                     throw new UsernameNotFoundException("User with name '" + username.get() + "' not found");
                 }
@@ -112,7 +114,7 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
 
         }
 
-        AuthenticationWithToken resultOfAuthentication = externalServiceAuthenticator.authenticate(userName, password.get());
+        AuthenticationWithToken resultOfAuthentication = externalServiceAuthenticator.authenticate(userName, password.get(), user.getDomain());
         String newToken = tokenService.generateNewToken();
         resultOfAuthentication.setToken(newToken);
         tokenService.store(newToken, resultOfAuthentication);

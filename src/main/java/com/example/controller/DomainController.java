@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.constants.GenericConstants;
+import com.example.model.CurrentlyLoggedUser;
 import com.example.model.Domain;
 import com.example.model.User;
 import com.example.service.DomainService;
@@ -8,6 +9,8 @@ import com.example.util.domain.vo.PagingAndSorting;
 import com.example.util.web.CRUDController;
 import com.example.util.web.SortingUtil;
 import com.example.vo.DomainVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,9 @@ import java.util.List;
 @RequestMapping("/domain")
 @Component
 public class DomainController extends CRUDController<Domain> {
+
+    /** Logger constant. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomainController.class);
 
     /**
      * Auto wired domainService.
@@ -70,6 +76,18 @@ public class DomainController extends CRUDController<Domain> {
         Page<Domain> pageResponse = domainService.findAll(page);
         response.setHeader(GenericConstants.CONTENT_RANGE_HEADER, page.getPageHeaderValue(pageResponse));
         return pageResponse.getContent();
+    }
+
+    /**
+     * This method is used to return the domain by alias name.
+     *
+     * @return the domain.
+     */
+    @RequestMapping(value="/detail", method = RequestMethod.GET)
+    public Domain findByAliasName(@RequestParam String aliasName, @CurrentlyLoggedUser User domainUser) {
+        LOGGER.info("User Name: {} ", domainUser.getUsername());
+        LOGGER.info("Domain Name: {} ", domainUser.getDomain().getAliasName());
+        return domainService.findByAliasName(aliasName);
     }
 
     /**

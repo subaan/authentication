@@ -108,8 +108,9 @@ public class User {
      * Parameterized constructor.
      * @param username to set
      */
-    public User(String username) {
+    public User(String username, Domain domain) {
         this.username = username;
+        this.domain = domain;
     }
 
     /**

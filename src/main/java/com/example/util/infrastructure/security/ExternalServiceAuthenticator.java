@@ -1,5 +1,7 @@
 package com.example.util.infrastructure.security;
 
+import com.example.model.Domain;
+
 /**
  * External Service Authenticator.
  *
@@ -12,5 +14,5 @@ public interface ExternalServiceAuthenticator {
      * @param password to set
      * @return token
      */
-    AuthenticationWithToken authenticate(String username, String password);
+    AuthenticationWithToken authenticate(String username, String password, Domain domain);
 }
