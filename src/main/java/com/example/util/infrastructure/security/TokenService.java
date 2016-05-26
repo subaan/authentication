@@ -69,4 +69,14 @@ public class TokenService {
     public Authentication retrieve(String token) {
         return (Authentication) REST_API_AUTH_TOKEN.get(token).getObjectValue();
     }
+
+    /**
+     * Get the auth token.
+     * @param token to set
+     * @return Authentication
+     */
+    public void remove(String token) {
+        CacheManager.getInstance().getCache("restApiAuthTokenCache")
+                .remove(REST_API_AUTH_TOKEN.get(token).getObjectKey());
+    }
 }

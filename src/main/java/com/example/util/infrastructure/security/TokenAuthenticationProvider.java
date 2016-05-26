@@ -1,12 +1,16 @@
 package com.example.util.infrastructure.security;
 
+import com.example.constants.GenericConstants;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import com.google.common.base.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Token authentication provider.
@@ -38,6 +42,26 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Invalid token or token expired");
         }
         return tokenService.retrieve(token.get());
+    }
+
+    /**
+     * Used to remove token form cache.
+     *
+     * @param httpRequest the http request
+     * @throws AuthenticationException
+     */
+    public void clearToken(HttpServletRequest httpRequest) throws AuthenticationException {
+
+        @SuppressWarnings("unchecked")
+        Optional<String> token = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN));
+
+        if (!token.isPresent() || token.get().isEmpty()) {
+            throw new BadCredentialsException("Invalid token");
+        }
+        if (!tokenService.contains(token.get())) {
+            throw new BadCredentialsException("Invalid token or token expired");
+        }
+        tokenService.remove(token.get());
     }
 
     @Override
