@@ -28,7 +28,7 @@ import java.util.List;
  * Created by Abdul on 19/5/16.
  */
 @RestController
-@RequestMapping("/domain")
+@RequestMapping("/api/domain")
 @Component
 public class DomainController extends CRUDController<Domain> implements ApiController {
 

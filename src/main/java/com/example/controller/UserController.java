@@ -24,7 +24,7 @@ import java.util.List;
  * Created by Abdul on 19/5/16.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController extends CRUDController<User> implements ApiController {
 
     /**

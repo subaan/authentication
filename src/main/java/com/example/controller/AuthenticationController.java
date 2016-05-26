@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * Created by Abdul on 24/5/16.
  */
+@RequestMapping("/api")
 public class AuthenticationController  {
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)

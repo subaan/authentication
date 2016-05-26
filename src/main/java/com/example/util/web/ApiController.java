@@ -34,16 +34,13 @@ public interface ApiController {
     String API_PATH = "/api";
 
     /** Authentication URL path. */
-    String AUTHENTICATE_URL = "/authenticate";
-
-    /** Stuff URL path. */
-    String STUFF_URL = API_PATH + "/stuff";
+    String AUTHENTICATE_URL = API_PATH + "/authenticate";
 
     // Spring Boot Actuator services path. username and password required in header .
     /** Auto config endpoint.*/
-    String DOMAIN_ENDPOINT = "/autoconfig";
+    String DOMAIN_ENDPOINT = API_PATH + "/domain";
     /** Beans endpoint. */
-    String USER_ENDPOINT = "/beans";
+    String USER_ENDPOINT = API_PATH + "/user";
     /** Config groups endpoint. */
     String CONFIGPROPS_ENDPOINT = "/configprops";
     /**Environment endpoint. */

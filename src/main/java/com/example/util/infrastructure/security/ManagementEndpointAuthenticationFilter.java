@@ -53,8 +53,6 @@ public class ManagementEndpointAuthenticationFilter extends GenericFilterBean {
      */
     private void prepareManagementEndpointsSet() {
         managementEndpoints = new HashSet<String>();
-        managementEndpoints.add(ApiController.DOMAIN_ENDPOINT);
-        managementEndpoints.add(ApiController.USER_ENDPOINT);
         managementEndpoints.add(ApiController.CONFIGPROPS_ENDPOINT);
         managementEndpoints.add(ApiController.ENV_ENDPOINT);
         managementEndpoints.add(ApiController.MAPPINGS_ENDPOINT);

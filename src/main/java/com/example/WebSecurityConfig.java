@@ -65,8 +65,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private String[] actuatorEndpoints() {
         return new String[]{
-                ApiController.DOMAIN_ENDPOINT,
-                ApiController.USER_ENDPOINT,
                 ApiController.CONFIGPROPS_ENDPOINT,
                 ApiController.ENV_ENDPOINT,
                 ApiController.MAPPINGS_ENDPOINT,
