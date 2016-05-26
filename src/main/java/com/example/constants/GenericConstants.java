@@ -37,4 +37,10 @@ public class GenericConstants {
 
     /** Constant used as form data as in authentication. */
     public static final String DOMAIN_NAME = "domainName";
+
+    /** Constant used as form data as in authentication. */
+    public static final String USERNAME = "username";
+
+    /** Constant used as form data as in authentication. */
+    public static final String PASSWORD = "password";
 }

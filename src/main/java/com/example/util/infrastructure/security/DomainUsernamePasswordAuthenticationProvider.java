@@ -85,7 +85,7 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
             } else {
 
                 //Check user under the domain
-                domainName = domainName.replace("\"", "");
+//                domainName = domainName.replace("\"", "");
                 Domain domain = domainService.findByAliasName(domainName);
                 System.out.println("DB domain is:  "+domain);
                 if(domain == null) {

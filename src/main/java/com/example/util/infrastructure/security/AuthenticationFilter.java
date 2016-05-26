@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import javax.json.Json;
+import javax.json.JsonException;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.servlet.FilterChain;
@@ -68,8 +69,8 @@ public class AuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = asHttp(request);
         HttpServletResponse httpResponse = asHttp(response);
 
-        Optional<String> username = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_USERNAME));
-        Optional<String> password = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_PASSWORD));
+//        Optional<String> username = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_USERNAME));
+//        Optional<String> password = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_PASSWORD));
         Optional<String> token = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN));
 
 
@@ -77,7 +78,6 @@ public class AuthenticationFilter extends GenericFilterBean {
 
         try {
             if (postToAuthenticate(httpRequest, resourcePath)) {
-                LOGGER.info("Trying to authenticate user {} by X-Auth-Username method", username);
 
                 StringBuffer jb = new StringBuffer();
                 String line = null;
@@ -87,20 +87,31 @@ public class AuthenticationFilter extends GenericFilterBean {
                         jb.append(line);
                 } catch (Exception e) { /*report an error*/ }
                 String domainName = "";
+                Optional<String> username = Optional.absent();
+                Optional<String> password = Optional.absent();
                 if(jb.toString() != null && !jb.toString().isEmpty()) {
 
                     // Convert String to Json Object.
                     JsonReader jsonReader = Json.createReader(new StringReader(jb.toString()));
                     JsonObject object = jsonReader.readObject();
 
+                    // Get domain name,username and password from json string.
                     domainName = object.get(GenericConstants.DOMAIN_NAME) == null ? "" :
-                            object.get(GenericConstants.DOMAIN_NAME).toString();
+                            object.getString(GenericConstants.DOMAIN_NAME);
+                    String jsonUsername = object.get(GenericConstants.USERNAME) == null ? "" :
+                            object.getString(GenericConstants.USERNAME);
+                    String jsonPassword = object.get(GenericConstants.PASSWORD) == null ? "" :
+                            object.getString(GenericConstants.PASSWORD);
+                    username = Optional.fromNullable(jsonUsername) ;
+                    password = Optional.fromNullable(jsonPassword);
 
                 }
 
                 // Set domain name to session
                 HttpSession session = httpRequest.getSession(true);
                 session.setAttribute("domainName", domainName);
+
+                LOGGER.info("Trying to authenticate user {} by X-Auth-Username method", username);
                 processUsernamePasswordAuthentication(httpResponse, username, password);
                 return;
             }
