@@ -36,6 +36,9 @@ public interface ApiController {
     /** Authentication URL path. */
     String AUTHENTICATE_URL = API_PATH + "/auth/login";
 
+    /** Logout URL path. */
+    String LOGOUT_URL = API_PATH + "/auth/logout";
+
     // Spring Boot Actuator services path. username and password required in header .
     /** Auto config endpoint.*/
     String DOMAIN_ENDPOINT = API_PATH + "/domain";

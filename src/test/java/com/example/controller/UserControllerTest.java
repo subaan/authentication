@@ -119,7 +119,7 @@ public class UserControllerTest {
             this.setUserListResponseFields();
 
             this.mockMvc.perform(
-                    get("/user").accept(MediaType.APPLICATION_JSON)
+                    get("/api/user").accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().isOk()).andDo(document("index"));;
 
         } catch (Exception e) {
@@ -141,7 +141,7 @@ public class UserControllerTest {
             this.setUserListResponseFields();
 
             this.mockMvc.perform(
-                    get("/user/list").accept(MediaType.APPLICATION_JSON)
+                    get("/api/user/list").accept(MediaType.APPLICATION_JSON)
                             .header("Range", "0-1").param("sortBy", "id")
             ).andExpect(status().isOk()).andDo(document("index"));
 
@@ -166,7 +166,7 @@ public class UserControllerTest {
             //To set user response fields
             this.setUserResponseFields();
 
-            this.mockMvc.perform(get("/user/" + id).accept(MediaType.APPLICATION_JSON))
+            this.mockMvc.perform(get("/api/user/" + id).accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk()).andDo(document("index"));
 
         }  catch (Exception e) {
@@ -191,7 +191,7 @@ public class UserControllerTest {
             //To set user request fields
             this.setUserRequestFields();
 
-            this.mockMvc.perform(post("/user")
+            this.mockMvc.perform(post("/api/user")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestUser.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -221,7 +221,7 @@ public class UserControllerTest {
             //To set user request fields
             this.setUserRequestFields();
 
-            this.mockMvc.perform(patch("/user/"+mockUser.getId())
+            this.mockMvc.perform(patch("/api/user/"+mockUser.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestUser.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -242,7 +242,7 @@ public class UserControllerTest {
         try {
             Long id = 1L;
 
-            this.mockMvc.perform(delete("/user/"+id)).andExpect(status().isNoContent()).andDo(document("index"));
+            this.mockMvc.perform(delete("/api/user/"+id)).andExpect(status().isNoContent()).andDo(document("index"));
 
         } catch (Exception e) {
             e.printStackTrace(System.err);

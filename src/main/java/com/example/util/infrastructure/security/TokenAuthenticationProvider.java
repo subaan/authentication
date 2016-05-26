@@ -43,27 +43,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
         }
         return tokenService.retrieve(token.get());
     }
-
-    /**
-     * Used to remove token form cache.
-     *
-     * @param httpRequest the http request
-     * @throws AuthenticationException
-     */
-    public void clearToken(HttpServletRequest httpRequest) throws AuthenticationException {
-
-        @SuppressWarnings("unchecked")
-        Optional<String> token = Optional.fromNullable(httpRequest.getHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN));
-
-        if (!token.isPresent() || token.get().isEmpty()) {
-            throw new BadCredentialsException("Invalid token");
-        }
-        if (!tokenService.contains(token.get())) {
-            throw new BadCredentialsException("Invalid token or token expired");
-        }
-        tokenService.remove(token.get());
-    }
-
+    
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(PreAuthenticatedAuthenticationToken.class);

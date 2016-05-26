@@ -3,19 +3,17 @@ package com.example.controller;
 import com.example.model.CurrentlyLoggedUser;
 import com.example.model.User;
 import com.example.service.UserService;
-import com.example.util.infrastructure.security.TokenAuthenticationProvider;
-import com.example.util.web.ApiController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.util.infrastructure.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,19 +22,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/api/auth")
-public class AuthenticationController  {
+@Component
+public class AuthController  {
 
     /**
-     * Auto wired userService.
+     * User managements service.
      */
     @Autowired
     private UserService userService;
 
+    /**
+     * Token management service.
+     */
     @Autowired
-    private TokenAuthenticationProvider tokenAuthenticationProvider;
-
-    /** Logger constant. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
+    private TokenService tokenService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String authenticate() {
@@ -49,18 +48,30 @@ public class AuthenticationController  {
                 "Authentication can be issued multiple times and each call results in new ticket.";
     }
 
+    /**
+     * This method is used to provide complete information of current user.
+     *
+     * @param currentUser the current login user
+     * @return the current user.
+     */
     @RequestMapping(value = "/whoami", method = RequestMethod.GET)
     public User getCurrentUser(@CurrentlyLoggedUser User currentUser) {
-        LOGGER.info("Who am i: {} ", currentUser.getUsername());
        return userService.findByUsernameAndDomain(currentUser.getUsername(), currentUser.getDomain());
     }
 
+    /**
+     * This method is used to clear the session and remove token.
+     *
+     * @param request the http request
+     * @param response the http response
+     */
     @RequestMapping(value="/logout", method = RequestMethod.POST)
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
-            tokenAuthenticationProvider.clearToken(request);
+            //Remove token
+            tokenService.clearToken(request);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.example.util.infrastructure.security;
 
 import java.util.UUID;
 
+import com.example.constants.GenericConstants;
+import com.google.common.base.Optional;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
@@ -9,7 +11,11 @@ import net.sf.ehcache.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+
+import javax.naming.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Token Service.
@@ -73,10 +79,28 @@ public class TokenService {
     /**
      * Get the auth token.
      * @param token to set
-     * @return Authentication
      */
     public void remove(String token) {
         CacheManager.getInstance().getCache("restApiAuthTokenCache")
                 .remove(REST_API_AUTH_TOKEN.get(token).getObjectKey());
+    }
+
+    /**
+     * Used to remove token form cache.
+     *
+     * @param request the http request.
+     * @throws org.springframework.security.core.AuthenticationException
+     */
+    public void clearToken(HttpServletRequest request) throws AuthenticationException {
+        Optional<String> token = Optional.fromNullable(request.getHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN));
+        if (!token.isPresent() || token.get().isEmpty()) {
+            throw new BadCredentialsException("Invalid token");
+        }
+
+        if (!this.contains(token.get())) {
+            throw new BadCredentialsException("Invalid token or token expired");
+        }
+        //Remove token
+        this.remove(token.get());
     }
 }

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import javax.json.Json;
-import javax.json.JsonException;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.servlet.FilterChain;

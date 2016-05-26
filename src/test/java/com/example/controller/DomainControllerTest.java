@@ -111,7 +111,7 @@ public class DomainControllerTest {
             this.setDomainListResponseFields();
 
             this.mockMvc.perform(
-                    get("/domain").accept(MediaType.APPLICATION_JSON)
+                    get("/api/domain").accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().isOk()).andDo(document("index"));;
 
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class DomainControllerTest {
             this.setDomainListResponseFields();
 
             this.mockMvc.perform(
-                    get("/domain/list").accept(MediaType.APPLICATION_JSON)
+                    get("/api/domain/list").accept(MediaType.APPLICATION_JSON)
                     .header("Range", "0-1").param("sortBy", "id")
             ).andExpect(status().isOk()).andDo(document("index"));
 
@@ -159,7 +159,7 @@ public class DomainControllerTest {
             //To set domain response fields
             this.setDomainResponseFields();
 
-            this.mockMvc.perform(get("/domain/" + id).accept(MediaType.APPLICATION_JSON))
+            this.mockMvc.perform(get("/api/domain/" + id).accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk()).andDo(document("index"));
 
         }  catch (Exception e) {
@@ -195,7 +195,7 @@ public class DomainControllerTest {
             //To set domain request fields
             this.setDomainRequestFields();
 
-            this.mockMvc.perform(post("/domain")
+            this.mockMvc.perform(post("/api/domain")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestDomain.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -237,7 +237,7 @@ public class DomainControllerTest {
             //To set domain request fields
             this.setDomainRequestFields();
 
-            this.mockMvc.perform(patch("/domain/"+mockDomain.getId())
+            this.mockMvc.perform(patch("/api/domain/"+mockDomain.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestDomain.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
@@ -259,7 +259,7 @@ public class DomainControllerTest {
         try {
             Long id = 1L;
 
-            this.mockMvc.perform(delete("/domain/"+id)).andExpect(status().isNoContent()).andDo(document("index"));
+            this.mockMvc.perform(delete("/api/domain/"+id)).andExpect(status().isNoContent()).andDo(document("index"));
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
