@@ -197,7 +197,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         String tokenJsonResponse = new ObjectMapper().writeValueAsString(tokenResponse);
         httpResponse.addHeader(GenericConstants.CONTENT_TYPE_HEADER, GenericConstants.CONTENT_TYPE_JSON);
         httpResponse.addHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN, resultOfAuthentication.getDetails().toString());
-        httpResponse.getWriter().print(tokenJsonResponse);
+//        httpResponse.getWriter().print(tokenJsonResponse);
     }
 
     /**

@@ -1,7 +1,9 @@
 = Getting Started Guide
 Abdul;
-doctype: book
-
+doctype: Auth module
+:toc: left
+:toclevels: 5
+:numbered:
 
 [[overview-http-verbs]]
 == HTTP verbs
@@ -43,6 +45,9 @@ use of HTTP status codes.
 | `201 Created`
 | The request has been fulfilled and resulted in a new resource being created.
 
+| `202 Accepted`
+| The  server has received and understood the request and that it has been accepted for processing, although it may not be processed immediately.
+
 | `204 No Content`
 | The server successfully processed the request, but is not returning any content.
 
@@ -53,13 +58,113 @@ use of HTTP status codes.
 | The requested resource could not be found but may be available again in the future. Subsequent requests by the client are permissible.
 |===
 
+== Authentication module
+
+This is used to authenticate the user
+
+=== Admin Login
+
+The super admin is authenticated with username and password.
+
+A `POST` request to authenticate the admin user.
+
+==== Request parameters
+
+include::{snippets}/auth-login-by-admin/request-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/auth-login-by-admin/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/auth-login-by-admin/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/auth-login-by-admin/http-response.adoc[]
+
+=== User Login
+
+The user is authenticated with username, password and domain name.
+
+A `POST` request to authenticate the user.
+
+==== Request parameters
+
+include::{snippets}/auth-login-by-user/request-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/auth-login-by-user/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/auth-login-by-user/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/auth-login-by-user/http-response.adoc[]
+
+=== Who Am I
+
+The current user details returned.
+
+A `GET` request to get current user information.
+
+==== Request headers
+
+include::{snippets}/auth-who-am-i/request-headers.adoc[]
+
+==== Response parameters
+
+include::{snippets}/auth-who-am-i/response-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/auth-who-am-i/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/auth-who-am-i/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/auth-who-am-i/http-response.adoc[]
+
+=== Logout
+
+The user session and token will be expired..
+
+A `POST` request to logout the user.
+
+==== Request headers
+
+include::{snippets}/auth-logout/request-headers.adoc[]
+
+==== Example curl request
+
+include::{snippets}/auth-logout/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/auth-logout/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/auth-logout/http-response.adoc[]
+
 == Domain
 
 The Domain resource is used to create, modify and list domain.
+
 [[resource-domain-list]]
 
 === Listing domain
+
 A `GET` request pagination lists of the domain.
+
+==== Response parameters
 
 include::{snippets}/domain-list-by-page/response-fields.adoc[]
 
@@ -78,7 +183,10 @@ include::{snippets}/domain-list-by-page/http-response.adoc[]
 [[resource-domain-detail]]
 
 === Getting domain
+
 A `GET` request to get domain details.
+
+==== Response parameters
 
 include::{snippets}/domain-get-detail/response-fields.adoc[]
 
@@ -99,6 +207,8 @@ include::{snippets}/domain-get-detail/http-response.adoc[]
 === Creating domain
 A `POST` request to create new domain.
 
+==== Request parameters
+
 include::{snippets}/domain-create/request-fields.adoc[]
 
 ==== Example curl request
@@ -114,7 +224,10 @@ include::{snippets}/domain-create/http-request.adoc[]
 include::{snippets}/domain-create/http-response.adoc[]
 
 === Updating domain
+
 A `PATCH` request to update a domain.
+
+==== Request parameters
 
 include::{snippets}/domain-update/request-fields.adoc[]
 
@@ -131,6 +244,7 @@ include::{snippets}/domain-update/http-request.adoc[]
 include::{snippets}/domain-update/http-response.adoc[]
 
 === Deleting a domain
+
 A `DELETE` request to delete a domain.
 
 ==== Example curl request
@@ -151,7 +265,10 @@ The User resource is used to create, modify and list user.
 [[resource-user-list]]
 
 === Listing user
+
 A `GET` request pagination lists of the user.
+
+==== Response parameters
 
 include::{snippets}/user-list-by-page/response-fields.adoc[]
 
@@ -168,7 +285,10 @@ include::{snippets}/user-list-by-page/http-request.adoc[]
 include::{snippets}/user-list-by-page/http-response.adoc[]
 
 === Getting user
+
 A `GET` request to get user details.
+
+==== Response parameters
 
 include::{snippets}/user-get-detail/response-fields.adoc[]
 
@@ -188,6 +308,8 @@ include::{snippets}/user-get-detail/http-response.adoc[]
 
 A `POST` request to create new domain.
 
+==== Request parameters
+
 include::{snippets}/user-create/request-fields.adoc[]
 
 ==== Example curl request
@@ -205,6 +327,8 @@ include::{snippets}/user-create/http-response.adoc[]
 === Updating user
 
 A `PATCH` request to update a user.
+
+==== Request parameters
 
 include::{snippets}/user-update/request-fields.adoc[]
 

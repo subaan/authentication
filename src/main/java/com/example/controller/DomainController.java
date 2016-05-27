@@ -1,7 +1,7 @@
 package com.example.controller;
 
 import com.example.constants.GenericConstants;
-import com.example.model.CurrentlyLoggedUser;
+import com.example.model.CurrentUser;
 import com.example.model.Domain;
 import com.example.model.User;
 import com.example.service.DomainService;
@@ -85,7 +85,7 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
      * @return the domain.
      */
     @RequestMapping(value="/detail", method = RequestMethod.GET)
-    public Domain findByAliasName(@RequestParam String aliasName, @CurrentlyLoggedUser User domainUser) {
+    public Domain findByAliasName(@RequestParam String aliasName, @CurrentUser User domainUser) {
         LOGGER.info("User Name: {} ", domainUser.getUsername());
         LOGGER.info("Domain Name: {} ", domainUser.getDomain().getAliasName());
         return domainService.findByAliasName(aliasName);

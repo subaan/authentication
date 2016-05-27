@@ -43,7 +43,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
         }
         return tokenService.retrieve(token.get());
     }
-    
+
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(PreAuthenticatedAuthenticationToken.class);

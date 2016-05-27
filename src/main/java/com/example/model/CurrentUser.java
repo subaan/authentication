@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 /**
  * Created by Abdul on 23/5/16.
  */
-public @interface CurrentlyLoggedUser {
+public @interface CurrentUser {
 }
 
 
