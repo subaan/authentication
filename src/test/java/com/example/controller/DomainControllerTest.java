@@ -5,7 +5,6 @@ package com.example.controller;
  */
 import com.example.Application;
 import com.example.model.Domain;
-import com.example.model.Person;
 import com.example.service.DomainService;
 import org.junit.Assert;
 import org.junit.Before;
