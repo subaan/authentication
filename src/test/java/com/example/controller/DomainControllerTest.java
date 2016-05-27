@@ -4,8 +4,10 @@ package com.example.controller;
  * Created by Abdul on 18/5/16.
  */
 import com.example.Application;
+import com.example.constants.GenericConstants;
 import com.example.model.Domain;
 import com.example.service.DomainService;
+import com.example.util.infrastructure.security.TokenService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,6 +42,8 @@ import javax.json.JsonObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Matchers.any;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -65,6 +69,9 @@ public class DomainControllerTest {
     private MockMvc mockMvc;
 
     private RestDocumentationResultHandler document;
+
+    @Autowired
+    private TokenService tokenService;
 
 
     /**
@@ -106,11 +113,16 @@ public class DomainControllerTest {
         try {
             BDDMockito.when(mockDomainService.findAll())
                     .thenReturn(buildMockDomainList());
+
+            //To set request header
+            this.setRequestHeaders();
             //To set domain response fields
             this.setDomainListResponseFields();
 
             this.mockMvc.perform(
-                    get("/api/domain").accept(MediaType.APPLICATION_JSON)
+                    get("/api/domain")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
             ).andExpect(status().isOk()).andDo(document("index"));;
 
         } catch (Exception e) {
@@ -128,11 +140,16 @@ public class DomainControllerTest {
         try {
             BDDMockito.when(mockDomainService.findAll(any()))
                     .thenReturn(buildMockDomainListPage());
+
+            //To set request header
+            this.setRequestHeaders();
             //To set domain response fields
             this.setDomainListResponseFields();
 
             this.mockMvc.perform(
-                    get("/api/domain/list").accept(MediaType.APPLICATION_JSON)
+                    get("/api/domain/list")
+                    .accept(MediaType.APPLICATION_JSON)
+                     .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
                     .header("Range", "0-1").param("sortBy", "id")
             ).andExpect(status().isOk()).andDo(document("index"));
 
@@ -155,10 +172,14 @@ public class DomainControllerTest {
             BDDMockito.when(mockDomainService.find(id))
                     .thenReturn(domain);
 
+            //To set request header
+            this.setRequestHeaders();
             //To set domain response fields
             this.setDomainResponseFields();
 
-            this.mockMvc.perform(get("/api/domain/" + id).accept(MediaType.APPLICATION_JSON))
+            this.mockMvc.perform(get("/api/domain/" + id)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken()))
                     .andExpect(status().isOk()).andDo(document("index"));
 
         }  catch (Exception e) {
@@ -191,11 +212,14 @@ public class DomainControllerTest {
                     .add("phoneNumber", "9879678546")
                     .build();
 
+            //To set request header
+            this.setRequestHeaders();
             //To set domain request fields
             this.setDomainRequestFields();
 
             this.mockMvc.perform(post("/api/domain")
                     .contentType(MediaType.APPLICATION_JSON)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
                     .content(requestDomain.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isCreated())
@@ -233,11 +257,14 @@ public class DomainControllerTest {
                     .add("status", "ACTIVE")
                     .build();
 
+            //To set request header
+            this.setRequestHeaders();
             //To set domain request fields
             this.setDomainRequestFields();
 
             this.mockMvc.perform(patch("/api/domain/"+mockDomain.getId())
                     .contentType(MediaType.APPLICATION_JSON)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
                     .content(requestDomain.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isAccepted())
@@ -258,12 +285,27 @@ public class DomainControllerTest {
         try {
             Long id = 1L;
 
-            this.mockMvc.perform(delete("/api/domain/"+id)).andExpect(status().isNoContent()).andDo(document("index"));
+            //To set request header
+            this.setRequestHeaders();
+
+            this.mockMvc.perform(delete("/api/domain/"+id)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken()))
+                    .andExpect(status().isNoContent()).andDo(document("index"));
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
             Assert.fail("Unexpected Exception");
         }
+    }
+
+    /**
+     * This method is used to set request headers.
+     */
+    private void setRequestHeaders() {
+
+        this.document.snippets(requestHeaders(headerWithName(GenericConstants.AUTHENTICATION_HEADER_TOKEN)
+                .description("The authentication unique token.")));
+
     }
 
 

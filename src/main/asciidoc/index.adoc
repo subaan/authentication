@@ -164,6 +164,10 @@ The Domain resource is used to create, modify and list domain.
 
 A `GET` request pagination lists of the domain.
 
+==== Request headers
+
+include::{snippets}/domain-list-by-page/request-headers.adoc[]
+
 ==== Response parameters
 
 include::{snippets}/domain-list-by-page/response-fields.adoc[]
@@ -186,6 +190,10 @@ include::{snippets}/domain-list-by-page/http-response.adoc[]
 
 A `GET` request to get domain details.
 
+==== Request headers
+
+include::{snippets}/domain-get-detail/request-headers.adoc[]
+
 ==== Response parameters
 
 include::{snippets}/domain-get-detail/response-fields.adoc[]
@@ -207,6 +215,10 @@ include::{snippets}/domain-get-detail/http-response.adoc[]
 === Creating domain
 A `POST` request to create new domain.
 
+==== Request headers
+
+include::{snippets}/domain-create/request-headers.adoc[]
+
 ==== Request parameters
 
 include::{snippets}/domain-create/request-fields.adoc[]
@@ -227,6 +239,10 @@ include::{snippets}/domain-create/http-response.adoc[]
 
 A `PATCH` request to update a domain.
 
+==== Request headers
+
+include::{snippets}/domain-update/request-headers.adoc[]
+
 ==== Request parameters
 
 include::{snippets}/domain-update/request-fields.adoc[]
@@ -246,6 +262,10 @@ include::{snippets}/domain-update/http-response.adoc[]
 === Deleting a domain
 
 A `DELETE` request to delete a domain.
+
+==== Request headers
+
+include::{snippets}/domain-remove/request-headers.adoc[]
 
 ==== Example curl request
 
@@ -268,6 +288,10 @@ The User resource is used to create, modify and list user.
 
 A `GET` request pagination lists of the user.
 
+==== Request headers
+
+include::{snippets}/user-list-by-page/request-headers.adoc[]
+
 ==== Response parameters
 
 include::{snippets}/user-list-by-page/response-fields.adoc[]
@@ -287,6 +311,10 @@ include::{snippets}/user-list-by-page/http-response.adoc[]
 === Getting user
 
 A `GET` request to get user details.
+
+==== Request headers
+
+include::{snippets}/user-get-detail/request-headers.adoc[]
 
 ==== Response parameters
 
@@ -308,6 +336,10 @@ include::{snippets}/user-get-detail/http-response.adoc[]
 
 A `POST` request to create new domain.
 
+==== Request headers
+
+include::{snippets}/user-create/request-headers.adoc[]
+
 ==== Request parameters
 
 include::{snippets}/user-create/request-fields.adoc[]
@@ -328,6 +360,10 @@ include::{snippets}/user-create/http-response.adoc[]
 
 A `PATCH` request to update a user.
 
+==== Request headers
+
+include::{snippets}/user-update/request-headers.adoc[]
+
 ==== Request parameters
 
 include::{snippets}/user-update/request-fields.adoc[]
@@ -347,6 +383,10 @@ include::{snippets}/user-update/http-response.adoc[]
 === Deleting a user
 
 A `DELETE` request to delete a user.
+
+==== Request headers
+
+include::{snippets}/user-remove/request-headers.adoc[]
 
 ==== Example curl request
 

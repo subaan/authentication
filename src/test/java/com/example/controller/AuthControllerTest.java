@@ -141,8 +141,6 @@ public class AuthControllerTest {
             AuthenticatedExternalWebService authenticationWithToken = new AuthenticatedExternalWebService(username, null,
                     AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_DOMAIN_USER"));
 
-            String token = tokenService.generateNewToken();
-
 //            BDDMockito.when(status().isOk()).
 //                    thenReturn(header().string(GenericConstants.AUTHENTICATION_HEADER_TOKEN, token));
 
@@ -160,7 +158,7 @@ public class AuthControllerTest {
                     .content(request.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isOk()).andDo(document("index"))
-                    .andReturn().getResponse().setHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN, token);
+                    .andReturn().getResponse().setHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken());
 
 //                    .andDo(document("headers", responseHeaders(headerWithName(GenericConstants.AUTHENTICATION_HEADER_TOKEN)
 //                            .description("Authentication token"))));
@@ -178,16 +176,13 @@ public class AuthControllerTest {
         try {
 
             String domainName = "Root";
-
-            String token = tokenService.generateNewToken();
-
             JsonObject request = Json.createObjectBuilder()
                     .add("username", username)
                     .add("password", password)
                     .add("domainName", domainName)
                     .build();
 
-            System.out.println("request :  "+request);
+            System.out.println("request :  " + request);
             //To set request fields
             this.setUserRequestFields();
 
@@ -196,7 +191,7 @@ public class AuthControllerTest {
                     .content(request.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isOk()).andDo(document("index"))
-                    .andReturn().getResponse().setHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN, token);
+                    .andReturn().getResponse().setHeader(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken());
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -210,20 +205,15 @@ public class AuthControllerTest {
 
         try {
 
-            String token = tokenService.generateNewToken();
-
             BDDMockito.when(authController.getCurrentUser(any())).thenReturn(this.buildMockUser());
 
-            //To set request header fields
-            this.document.snippets(requestHeaders(headerWithName(GenericConstants.AUTHENTICATION_HEADER_TOKEN)
-            .description("The unique token for user authentication.")));
-
-            //To set user response fields
+            //To set request header and response fields
+            this.setRequestHeaders();
             this.setUserResponseFields();
 
             this.mockMvc.perform(get("/api/auth/whoami")
                     .accept(MediaType.APPLICATION_JSON_VALUE)
-                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, token))
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken()))
                     .andExpect(status().isOk()).andDo(document("index"));
 
 
@@ -239,14 +229,11 @@ public class AuthControllerTest {
 
         try {
 
-            String token = tokenService.generateNewToken();
-
             //To set request header fields
-            this.document.snippets(requestHeaders(headerWithName(GenericConstants.AUTHENTICATION_HEADER_TOKEN)
-                    .description("The authentication unique token.")));
+            this.setRequestHeaders();
 
             this.mockMvc.perform(post(ApiController.LOGOUT_URL)
-                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, token))
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken()))
                     .andExpect(status().isOk()).andDo(document("index"));
 
 
@@ -254,6 +241,16 @@ public class AuthControllerTest {
             e.printStackTrace(System.err);
             Assert.fail("Unexpected Exception");
         }
+
+    }
+
+    /**
+     * This method is used to set request headers.
+     */
+    private void setRequestHeaders() {
+
+        this.document.snippets(requestHeaders(headerWithName(GenericConstants.AUTHENTICATION_HEADER_TOKEN)
+                .description("The authentication unique token.")));
 
     }
 

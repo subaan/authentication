@@ -1,9 +1,11 @@
 package com.example.controller;
 
 import com.example.Application;
+import com.example.constants.GenericConstants;
 import com.example.model.Domain;
 import com.example.model.User;
 import com.example.service.UserService;
+import com.example.util.infrastructure.security.TokenService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,6 +39,8 @@ import java.util.List;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Matchers.any;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -68,6 +72,9 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     private RestDocumentationResultHandler document;
+
+    @Autowired
+    private TokenService tokenService;
 
 
     /**
@@ -115,11 +122,16 @@ public class UserControllerTest {
         try {
             BDDMockito.when(mockUserService.findAll())
                     .thenReturn(buildMockUserList());
+
+            //To set request header
+            this.setRequestHeaders();
             //To set user response fields
             this.setUserListResponseFields();
 
             this.mockMvc.perform(
-                    get("/api/user").accept(MediaType.APPLICATION_JSON)
+                get("/api/user")
+                .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
+                .accept(MediaType.APPLICATION_JSON)
             ).andExpect(status().isOk()).andDo(document("index"));;
 
         } catch (Exception e) {
@@ -137,11 +149,15 @@ public class UserControllerTest {
         try {
             BDDMockito.when(mockUserService.findAll(any()))
                     .thenReturn(buildMockUserListPage());
+
+            //To set request header
+            this.setRequestHeaders();
             //To set user response fields
             this.setUserListResponseFields();
 
             this.mockMvc.perform(
                     get("/api/user/list").accept(MediaType.APPLICATION_JSON)
+                            .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
                             .header("Range", "0-1").param("sortBy", "id")
             ).andExpect(status().isOk()).andDo(document("index"));
 
@@ -163,10 +179,13 @@ public class UserControllerTest {
             BDDMockito.when(mockUserService.find(id))
                     .thenReturn(user);
 
+            //To set request header
+            this.setRequestHeaders();
             //To set user response fields
             this.setUserResponseFields();
 
-            this.mockMvc.perform(get("/api/user/" + id).accept(MediaType.APPLICATION_JSON))
+            this.mockMvc.perform(get("/api/user/" + id).accept(MediaType.APPLICATION_JSON)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken()))
                     .andExpect(status().isOk()).andDo(document("index"));
 
         }  catch (Exception e) {
@@ -188,11 +207,14 @@ public class UserControllerTest {
 
             JsonObject requestUser = this.buildMockUserRequest();
 
+            //To set request header
+            this.setRequestHeaders();
             //To set user request fields
             this.setUserRequestFields();
 
             this.mockMvc.perform(post("/api/user")
                     .contentType(MediaType.APPLICATION_JSON)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
                     .content(requestUser.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isCreated())
@@ -218,11 +240,14 @@ public class UserControllerTest {
 
             JsonObject requestUser = this.buildMockUserRequest();
 
+            //To set request header
+            this.setRequestHeaders();
             //To set user request fields
             this.setUserRequestFields();
 
             this.mockMvc.perform(patch("/api/user/"+mockUser.getId())
                     .contentType(MediaType.APPLICATION_JSON)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken())
                     .content(requestUser.toString())
                     .accept(MediaType.APPLICATION_JSON_VALUE))
                     .andExpect(status().isAccepted())
@@ -242,12 +267,27 @@ public class UserControllerTest {
         try {
             Long id = 1L;
 
-            this.mockMvc.perform(delete("/api/user/"+id)).andExpect(status().isNoContent()).andDo(document("index"));
+            //To set request header
+            this.setRequestHeaders();
+
+            this.mockMvc.perform(delete("/api/user/"+id)
+                    .header(GenericConstants.AUTHENTICATION_HEADER_TOKEN, tokenService.generateNewToken()))
+                    .andExpect(status().isNoContent()).andDo(document("index"));
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
             Assert.fail("Unexpected Exception");
         }
+    }
+
+    /**
+     * This method is used to set request headers.
+     */
+    private void setRequestHeaders() {
+
+        this.document.snippets(requestHeaders(headerWithName(GenericConstants.AUTHENTICATION_HEADER_TOKEN)
+                .description("The authentication unique token.")));
+
     }
 
 
