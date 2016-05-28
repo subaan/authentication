@@ -29,6 +29,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<User> findAllByDomain(PagingAndSorting pagingAndSorting, Domain domain) {
+        return userRepository.findAllByDomain(pagingAndSorting.toPageRequest(),domain);
+    }
+
+    @Override
     public User find(Long id) throws Exception {
         return userRepository.findOne(id);
     }
@@ -46,6 +51,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(User User) throws Exception {
 
+    }
+
+    @Override
+    public Iterable<User> findAllByDomain(Domain domain) {
+        return userRepository.findAllByDomain(domain);
     }
 
     @Override
@@ -71,6 +81,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsernameAndPasswordAndDomain(String username, String password, Domain domain) {
         return userRepository.findByUsernameAndPasswordAndDomain(username, password, domain);
+    }
+
+    @Override
+    public Boolean isUserExist(String username, Domain domain) {
+
+        Boolean isUserExist = false;
+        User existingUser = this.findByUsernameAndDomain(username, domain);
+
+        if(existingUser != null) {
+            isUserExist = true;
+        }
+        return  isUserExist;
     }
 
 }

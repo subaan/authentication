@@ -1,8 +1,10 @@
 package com.example.controller;
 
 import com.example.constants.GenericConstants;
+import com.example.model.Domain;
 import com.example.model.User;
 import com.example.repository.DomainRepository;
+import com.example.service.DomainService;
 import com.example.service.UserService;
 import com.example.util.domain.vo.PagingAndSorting;
 import com.example.util.web.ApiController;
@@ -11,6 +13,7 @@ import com.example.util.web.SortingUtil;
 import com.example.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -36,6 +39,12 @@ public class UserController extends CRUDController<User> implements ApiControlle
     private UserService userService;
 
     /**
+     * Auto wired userService.
+     */
+    @Autowired
+    private DomainService domainService;
+
+    /**
      * Auto wired domainRepository.
      */
     @Autowired
@@ -48,8 +57,14 @@ public class UserController extends CRUDController<User> implements ApiControlle
      * @throws Exception default exception.
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Iterable<User> list() throws  Exception {
-        return userService.findAll();
+    public Iterable<User> list(@RequestParam(value = "domainId", required = false) Long domainId) throws  Exception {
+
+        if(domainId == null) {
+            return userService.findAll();
+        } else {
+            Domain domain = domainService.find(domainId);
+            return userService.findAllByDomain(domain);
+        }
     }
 
     /**
@@ -65,16 +80,20 @@ public class UserController extends CRUDController<User> implements ApiControlle
      * @return the domain list by page
      * @throws Exception the default exception.
      */
-    @Override
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<User> list(@RequestParam String sortBy, @RequestHeader(value = RANGE) String range,
-                             HttpServletRequest request, HttpServletResponse response) throws Exception {
+                           @RequestParam(value = "domainId", required = false) Long domainId,
+                           HttpServletRequest request, HttpServletResponse response) throws Exception {
         //Set default value if null
         range = SortingUtil.defaultIfNullorEmpty(range, "0-10");
         sortBy = SortingUtil.defaultIfNullorEmpty(sortBy, "id");
 
         PagingAndSorting page = new PagingAndSorting(range, sortBy, User.class);
-        Page<User> pageResponse = userService.findAll(page);
+        Domain domain = new Domain();
+        if(domainId != null) {
+            domain = domainService.find(domainId);
+        }
+        Page<User> pageResponse = domainId == null ? userService.findAll(page) : userService.findAllByDomain(page,domain);
         response.setHeader(GenericConstants.CONTENT_RANGE_HEADER, page.getPageHeaderValue(pageResponse));
         return pageResponse.getContent();
     }
@@ -113,21 +132,30 @@ public class UserController extends CRUDController<User> implements ApiControlle
     @RequestMapping(value = "/create", method = RequestMethod.POST,
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public String createUser(@RequestBody UserVO userVO) throws  Exception {
+    public String createUser(@RequestBody UserVO userVO) throws Exception {
 
-        //Create new user
-        User user = new User();
-        user.setUsername(userVO.getUsername());
-        user.setPassword(userVO.getPassword());
-        user.setEmailId(userVO.getEmailId());
-        user.setDomain(domainRepository.findOne(userVO.getDomainId()));
-        user.setStatus(User.UserStatus.valueOf(userVO.getStatus()));
-        user.setType(User.UserType.valueOf(userVO.getType()));
-        user.setCreatedDate(new Date());
+        Domain domain = domainService.find(userVO.getDomainId());
+        Boolean isUserExist = userService.isUserExist(userVO.getUsername(), domain);
 
-        userService.create(user);
+        if(!isUserExist) {
+            //Create new user
+            User user = new User();
+            user.setUsername(userVO.getUsername());
+            user.setPassword(userVO.getPassword());
+            user.setEmailId(userVO.getEmailId());
+            user.setDomain(domain);
+            user.setStatus(User.UserStatus.valueOf(userVO.getStatus()));
+            user.setType(User.UserType.valueOf(userVO.getType()));
+            user.setCreatedDate(new Date());
+            userService.create(user);
 
-        return "{\"result\":\"success\"}";
+            return "{\"result\":\"success\"}";
+
+        } else {
+            throw new Exception("User already exist in the domain");
+        }
+
+
     }
 
     /**
@@ -143,17 +171,24 @@ public class UserController extends CRUDController<User> implements ApiControlle
     @ResponseStatus(HttpStatus.ACCEPTED)
     public String updateUser(@RequestBody UserVO userVO, @PathVariable(PATH_ID) Long id) throws Exception {
         //Get existing user
-        User existinguser = userService.find(id);
-        //Update new values
-        existinguser.setUsername(userVO.getUsername());
-        existinguser.setPassword(userVO.getPassword());
-        existinguser.setEmailId(userVO.getEmailId());
-        existinguser.setStatus(User.UserStatus.valueOf(userVO.getStatus()));
-        existinguser.setType(User.UserType.valueOf(userVO.getType()));
-        existinguser.setUpdatedDate(new Date());
-        userService.update(existinguser);
+        User existingUser = userService.find(id);
+        Boolean isUserExist = userService.isUserExist(userVO.getUsername(), existingUser.getDomain());
 
-        return "{\"result\":\"success\"}";
+        if(!isUserExist) {
+            //Update new values
+            existingUser.setUsername(userVO.getUsername());
+            existingUser.setPassword(userVO.getPassword());
+            existingUser.setEmailId(userVO.getEmailId());
+            existingUser.setStatus(User.UserStatus.valueOf(userVO.getStatus()));
+            existingUser.setType(User.UserType.valueOf(userVO.getType()));
+            existingUser.setUpdatedDate(new Date());
+            userService.update(existingUser);
+
+            return "{\"result\":\"success\"}";
+        } else {
+            throw new Exception("User already exist in the domain");
+        }
+
     }
 
     /**
