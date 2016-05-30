@@ -95,7 +95,7 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
      * This method is used to return the domain by ID.
      *
      * @param id the domain ID.
-     * @return the domain list.
+     * @return the domain.
      * @throws Exception default exception.
      */
     @Override

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by Abdul on 19/5/16.
  */
@@ -31,6 +33,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> findAllByDomain(PagingAndSorting pagingAndSorting, Domain domain) {
         return userRepository.findAllByDomain(pagingAndSorting.toPageRequest(),domain);
+    }
+
+    @Override
+    public List<User> findAllByIds(List<Long> ids) {
+        return userRepository.findAllByIds(ids);
     }
 
     @Override

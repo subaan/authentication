@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @AuthenticationPrincipal
 /**
+ * This is used to get current user detail from the token.
+ *
  * Created by Abdul on 23/5/16.
  */
 public @interface CurrentUser {

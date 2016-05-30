@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created by Abdul on 19/5/16.
  */
@@ -69,4 +71,13 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
      */
 //    @Query("SELECT u FROM User u WHERE u.username = :username and u.password = :password and u.domain = :domain")
     User findByUsernameAndPasswordAndDomain(String username, String password, Domain domain);
+
+    /**
+     * This method find user list with specified user ids.
+     *
+     * @param ids the user id list.
+     * @return User list.
+     */
+    @Query("SELECT u FROM User u WHERE u.id in :ids")
+    List<User> findAllByIds(@Param("ids") List<Long> ids);
 }

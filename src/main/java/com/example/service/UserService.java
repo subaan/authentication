@@ -7,6 +7,8 @@ import com.example.util.domain.vo.PagingAndSorting;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * Created by Abdul on 20/5/16.
  */
@@ -30,6 +32,15 @@ public interface UserService extends CRUDService<User> {
      * @throws Exception if error occurs
      */
     Page<User> findAllByDomain(PagingAndSorting pagingAndSorting, Domain domain);
+
+
+    /**
+     * This method find user list with specified user ids.
+     *
+     * @param ids the user id list.
+     * @return User list.
+     */
+    List<User> findAllByIds(List<Long> ids);
 
     /**
      * This method find user with specified user name.

@@ -11,6 +11,8 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
+ * The user details has been manged.
+ *
  * Created by Abdul on 18/5/16.
  */
 @Entity
@@ -35,7 +37,6 @@ public class User {
             +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
             +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
             message="{invalid.email}")
-    @Column(unique=true)
     private String emailId;
 
     /** The unique email ID of user */
