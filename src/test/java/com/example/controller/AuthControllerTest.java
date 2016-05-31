@@ -67,7 +67,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 public class AuthControllerTest {
 
     @Rule
-    public final RestDocumentation restDocumentation = new RestDocumentation("build/generated-snippets");
+    public final RestDocumentation restDocumentation = new RestDocumentation("build/generated-snippets/auth");
 
     @Autowired
     private WebApplicationContext context;
@@ -126,7 +126,7 @@ public class AuthControllerTest {
     @Before
     public void setUp() {
 //        Mockito.reset(mockedExternalServiceAuthenticator);
-        this.document = document("auth-{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+        this.document = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(this.restDocumentation))
                 .alwaysDo(this.document)

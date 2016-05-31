@@ -202,10 +202,12 @@ public class GroupController extends CRUDController<Group> implements ApiControl
 
         if(!isGroupExist) {
             Group group = groupService.find(id);
-            group.setName(groupVO.getName());
-            group.setUsers(userService.findAllByIds(groupVO.getUsers()));
-            group.setLastModifiedDateTime(new Date());
-            return groupService.create(group);
+            if(group != null) {
+                group.setName(groupVO.getName());
+                group.setUsers(userService.findAllByIds(groupVO.getUsers()));
+                group.setLastModifiedDateTime(new Date());
+            }
+            return groupService.update(group);
 
         } else {
             throw new Exception("Group already exist in the domain");
@@ -225,8 +227,10 @@ public class GroupController extends CRUDController<Group> implements ApiControl
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGroup(@PathVariable(PATH_ID) Long id) throws  Exception {
         Group group = groupService.find(id);
-        group.setDeleted(true);
-        group.setDeletedDateTime(new Date());
+        if(group != null) {
+            group.setDeleted(true);
+            group.setDeletedDateTime(new Date());
+        }
         groupService.update(group);
     }
 

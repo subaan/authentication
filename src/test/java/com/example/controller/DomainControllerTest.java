@@ -58,7 +58,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class DomainControllerTest {
     @Rule
-    public final RestDocumentation restDocumentation = new RestDocumentation("build/generated-snippets");
+    public final RestDocumentation restDocumentation = new RestDocumentation("build/generated-snippets/domain");
 
     @Autowired
     private WebApplicationContext context;
@@ -98,7 +98,7 @@ public class DomainControllerTest {
     @Before
     public void setUp() {
         Mockito.reset(mockDomainService);
-        this.document = document("domain-{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+        this.document = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(this.restDocumentation))
                 .alwaysDo(this.document)

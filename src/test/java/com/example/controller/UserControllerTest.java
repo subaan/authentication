@@ -59,7 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     @Rule
-    public final RestDocumentation restDocumentation = new RestDocumentation("build/generated-snippets");
+    public final RestDocumentation restDocumentation = new RestDocumentation("build/generated-snippets/user");
 
     @Autowired
     private WebApplicationContext context;
@@ -106,7 +106,7 @@ public class UserControllerTest {
     @Before
     public void setUp() {
         Mockito.reset(mockUserService);
-        this.document = document("user-{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
+        this.document = document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()));
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(this.restDocumentation))
                 .alwaysDo(this.document)
@@ -117,7 +117,7 @@ public class UserControllerTest {
     /**
      * Test the user list.
      */
-    @Test
+//    @Test
     public void list() throws Exception {
         try {
             BDDMockito.when(mockUserService.findAll())
@@ -292,7 +292,7 @@ public class UserControllerTest {
 
 
     /**
-     * This method is used to set the domain response fields for documentation.
+     * This method is used to set the user response fields for documentation.
      */
     private void setUserListResponseFields () {
 
@@ -328,7 +328,7 @@ public class UserControllerTest {
     }
 
     /**
-     * This method is used to set the domain response fields for documentation.
+     * This method is used to set the user response fields for documentation.
      */
     private void setUserResponseFields () {
 

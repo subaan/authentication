@@ -70,19 +70,19 @@ A `POST` request to authenticate the admin user.
 
 ==== Request parameters
 
-include::{snippets}/auth-login-by-admin/request-fields.adoc[]
+include::{snippets}/auth/login-by-admin/request-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/auth-login-by-admin/curl-request.adoc[]
+include::{snippets}/auth/login-by-admin/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/auth-login-by-admin/http-request.adoc[]
+include::{snippets}/auth/login-by-admin/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/auth-login-by-admin/http-response.adoc[]
+include::{snippets}/auth/login-by-admin/http-response.adoc[]
 
 === User Login
 
@@ -92,19 +92,19 @@ A `POST` request to authenticate the user.
 
 ==== Request parameters
 
-include::{snippets}/auth-login-by-user/request-fields.adoc[]
+include::{snippets}/auth/login-by-user/request-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/auth-login-by-user/curl-request.adoc[]
+include::{snippets}/auth/login-by-user/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/auth-login-by-user/http-request.adoc[]
+include::{snippets}/auth/login-by-user/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/auth-login-by-user/http-response.adoc[]
+include::{snippets}/auth/login-by-user/http-response.adoc[]
 
 === Who Am I
 
@@ -114,23 +114,23 @@ A `GET` request to get current user information.
 
 ==== Request headers
 
-include::{snippets}/auth-who-am-i/request-headers.adoc[]
+include::{snippets}/auth/who-am-i/request-headers.adoc[]
 
 ==== Response parameters
 
-include::{snippets}/auth-who-am-i/response-fields.adoc[]
+include::{snippets}/auth/who-am-i/response-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/auth-who-am-i/curl-request.adoc[]
+include::{snippets}/auth/who-am-i/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/auth-who-am-i/http-request.adoc[]
+include::{snippets}/auth/who-am-i/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/auth-who-am-i/http-response.adoc[]
+include::{snippets}/auth/who-am-i/http-response.adoc[]
 
 === Logout
 
@@ -140,19 +140,19 @@ A `POST` request to logout the user.
 
 ==== Request headers
 
-include::{snippets}/auth-logout/request-headers.adoc[]
+include::{snippets}/auth/logout/request-headers.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/auth-logout/curl-request.adoc[]
+include::{snippets}/auth/logout/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/auth-logout/http-request.adoc[]
+include::{snippets}/auth/logout/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/auth-logout/http-response.adoc[]
+include::{snippets}/auth/logout/http-response.adoc[]
 
 == Domain
 
@@ -166,25 +166,25 @@ A `GET` request pagination lists of the domain.
 
 ==== Request headers
 
-include::{snippets}/domain-list-by-page/request-headers.adoc[]
+include::{snippets}/domain/list-by-page/request-headers.adoc[]
 
 ==== Response parameters
 
-include::{snippets}/domain-list-by-page/response-fields.adoc[]
+include::{snippets}/domain/list-by-page/response-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/domain-list-by-page/curl-request.adoc[]
+include::{snippets}/domain/list-by-page/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/domain-list-by-page/http-request.adoc[]
+include::{snippets}/domain/list-by-page/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/domain-list-by-page/http-response.adoc[]
+include::{snippets}/domain/list-by-page/http-response.adoc[]
 
-[[resource-domain-detail]]
+[[resource-domain/detail]]
 
 === Getting domain
 
@@ -192,48 +192,48 @@ A `GET` request to get domain details.
 
 ==== Request headers
 
-include::{snippets}/domain-get-detail/request-headers.adoc[]
+include::{snippets}/domain/get-detail/request-headers.adoc[]
 
 ==== Response parameters
 
-include::{snippets}/domain-get-detail/response-fields.adoc[]
+include::{snippets}/domain/get-detail/response-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/domain-get-detail/curl-request.adoc[]
+include::{snippets}/domain/get-detail/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/domain-get-detail/http-request.adoc[]
+include::{snippets}/domain/get-detail/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/domain-get-detail/http-response.adoc[]
+include::{snippets}/domain/get-detail/http-response.adoc[]
 
-[[resource-domain-create]]
+[[resource-domain/create]]
 
 === Creating domain
 A `POST` request to create new domain.
 
 ==== Request headers
 
-include::{snippets}/domain-create/request-headers.adoc[]
+include::{snippets}/domain/create/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/domain-create/request-fields.adoc[]
+include::{snippets}/domain/create/request-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/domain-create/curl-request.adoc[]
+include::{snippets}/domain/create/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/domain-create/http-request.adoc[]
+include::{snippets}/domain/create/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/domain-create/http-response.adoc[]
+include::{snippets}/domain/create/http-response.adoc[]
 
 === Updating domain
 
@@ -241,23 +241,23 @@ A `PATCH` request to update a domain.
 
 ==== Request headers
 
-include::{snippets}/domain-update/request-headers.adoc[]
+include::{snippets}/domain/update/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/domain-update/request-fields.adoc[]
+include::{snippets}/domain/update/request-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/domain-update/curl-request.adoc[]
+include::{snippets}/domain/update/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/domain-update/http-request.adoc[]
+include::{snippets}/domain/update/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/domain-update/http-response.adoc[]
+include::{snippets}/domain/update/http-response.adoc[]
 
 === Deleting a domain
 
@@ -265,19 +265,19 @@ A `DELETE` request to delete a domain.
 
 ==== Request headers
 
-include::{snippets}/domain-remove/request-headers.adoc[]
+include::{snippets}/domain/remove/request-headers.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/domain-remove/curl-request.adoc[]
+include::{snippets}/domain/remove/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/domain-remove/http-request.adoc[]
+include::{snippets}/domain/remove/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/domain-remove/http-response.adoc[]
+include::{snippets}/domain/remove/http-response.adoc[]
 
 == User
 
@@ -290,23 +290,23 @@ A `GET` request pagination lists of the user.
 
 ==== Request headers
 
-include::{snippets}/user-list-by-page/request-headers.adoc[]
+include::{snippets}/user/list-by-page/request-headers.adoc[]
 
 ==== Response parameters
 
-include::{snippets}/user-list-by-page/response-fields.adoc[]
+include::{snippets}/user/list-by-page/response-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/user-list-by-page/curl-request.adoc[]
+include::{snippets}/user/list-by-page/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/user-list-by-page/http-request.adoc[]
+include::{snippets}/user/list-by-page/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/user-list-by-page/http-response.adoc[]
+include::{snippets}/user/list-by-page/http-response.adoc[]
 
 === Getting user
 
@@ -314,23 +314,23 @@ A `GET` request to get user details.
 
 ==== Request headers
 
-include::{snippets}/user-get-detail/request-headers.adoc[]
+include::{snippets}/user/get-detail/request-headers.adoc[]
 
 ==== Response parameters
 
-include::{snippets}/user-get-detail/response-fields.adoc[]
+include::{snippets}/user/get-detail/response-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/user-get-detail/curl-request.adoc[]
+include::{snippets}/user/get-detail/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/user-get-detail/http-request.adoc[]
+include::{snippets}/user/get-detail/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/user-get-detail/http-response.adoc[]
+include::{snippets}/user/get-detail/http-response.adoc[]
 
 === Creating user
 
@@ -338,23 +338,23 @@ A `POST` request to create new domain.
 
 ==== Request headers
 
-include::{snippets}/user-create/request-headers.adoc[]
+include::{snippets}/user/create/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/user-create/request-fields.adoc[]
+include::{snippets}/user/create/request-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/user-create/curl-request.adoc[]
+include::{snippets}/user/create/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/user-create/http-request.adoc[]
+include::{snippets}/user/create/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/user-create/http-response.adoc[]
+include::{snippets}/user/create/http-response.adoc[]
 
 === Updating user
 
@@ -362,23 +362,23 @@ A `PATCH` request to update a user.
 
 ==== Request headers
 
-include::{snippets}/user-update/request-headers.adoc[]
+include::{snippets}/user/update/request-headers.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/user-update/request-fields.adoc[]
+include::{snippets}/user/update/request-fields.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/user-update/curl-request.adoc[]
+include::{snippets}/user/update/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/user-update/http-request.adoc[]
+include::{snippets}/user/update/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/user-update/http-response.adoc[]
+include::{snippets}/user/update/http-response.adoc[]
 
 === Deleting a user
 
@@ -386,20 +386,131 @@ A `DELETE` request to delete a user.
 
 ==== Request headers
 
-include::{snippets}/user-remove/request-headers.adoc[]
+include::{snippets}/user/remove/request-headers.adoc[]
 
 ==== Example curl request
 
-include::{snippets}/user-remove/curl-request.adoc[]
+include::{snippets}/user/remove/curl-request.adoc[]
 
 ==== Example request
 
-include::{snippets}/user-remove/http-request.adoc[]
+include::{snippets}/user/remove/http-request.adoc[]
 
 ==== Example response
 
-include::{snippets}/user-remove/http-response.adoc[]
+include::{snippets}/user/remove/http-response.adoc[]
 
+== Group
 
+The Group have multple user under the domain.
 
+[[resource-group-list]]
+
+=== Getting group
+
+A `GET` request to get group details.
+
+==== Request headers
+
+include::{snippets}/group/list-by-page/request-headers.adoc[]
+
+==== Response parameters
+
+include::{snippets}/group/list-by-page/response-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/group/list-by-page/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/group/list-by-page/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/group/list-by-page/http-response.adoc[]
+
+[[resource-group-create]]
+
+=== Creating group
+
+A `POST` request to create new group.
+
+==== Response parameters
+
+include::{snippets}/group/create/response-fields.adoc[]
+
+==== Request headers
+
+include::{snippets}/group/create/request-headers.adoc[]
+
+==== Request parameters
+
+include::{snippets}/group/create/request-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/group/create/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/group/create/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/group/create/http-response.adoc[]
+
+[[resource-group-update]]
+
+=== Updating group
+
+A `PATCH` request to update a group.
+
+==== Response parameters
+
+include::{snippets}/group/update/response-fields.adoc[]
+
+==== Request headers
+
+include::{snippets}/group/update/request-headers.adoc[]
+
+==== Request parameters
+
+include::{snippets}/group/update/request-fields.adoc[]
+
+==== Example curl request
+
+include::{snippets}/group/update/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/group/update/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/group/update/http-response.adoc[]
+
+[[resource-group-delete]]
+
+=== Deleting a group
+
+Soft delete the group.
+
+A `DELETE` request to delete a group.
+
+==== Request headers
+
+include::{snippets}/group/remove/request-headers.adoc[]
+
+==== Example curl request
+
+include::{snippets}/group/remove/curl-request.adoc[]
+
+==== Example request
+
+include::{snippets}/group/remove/http-request.adoc[]
+
+==== Example response
+
+include::{snippets}/group/remove/http-response.adoc[]
 

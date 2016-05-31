@@ -28,26 +28,27 @@ public class AuditColumns {
 
      /** Created by user. */
     @CreatedBy
-    @JoinColumn(name = "created_user_id", referencedColumnName = "id")
+    @JoinColumn(name = "created_user_id", updatable = false)
     @OneToOne
-    private User createdBy;
+    private Long createdBy;
 
     /** Last updated by user. */
     @LastModifiedBy
-    @JoinColumn(name = "updated_user_id", referencedColumnName = "id")
+    @JoinColumn(name = "updated_user_id")
     @OneToOne
-    private User updatedBy;
+    private Long updatedBy;
 
     /** Deleted by user. */
     @LastModifiedBy
-    @JoinColumn(name = "deleted_user_id", referencedColumnName = "id")
+    @JoinColumn(name = "deleted_user_id")
     @OneToOne
-    private User deletedBy;
+    private Long deletedBy;
 
     /** Created date and time. */
     @CreatedDate
     @DateTimeFormat(style = "M-")
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date_time", updatable = false)
     private Date createdDateTime;
 
     /** Last modified date and time. */
@@ -72,7 +73,7 @@ public class AuditColumns {
      * Get the createdBy.
      * @return createdBy
      */
-    public User getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
@@ -80,7 +81,7 @@ public class AuditColumns {
      * Set the createdBy.
      * @param createdBy - the User to set
      */
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -88,7 +89,7 @@ public class AuditColumns {
      * Get the updatedBy.
      * @return updatedBy
      */
-    public User getUpdatedBy() {
+    public Long getUpdatedBy() {
         return updatedBy;
     }
 
@@ -96,7 +97,7 @@ public class AuditColumns {
      * Set the updatedBy.
      * @param updatedBy - the User to set
      */
-    public void setUpdatedBy(User updatedBy) {
+    public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -154,7 +155,7 @@ public class AuditColumns {
      * Get the deletedBy.
      * @return deletedBy
      */
-    public User getDeletedBy() {
+    public Long getDeletedBy() {
         return deletedBy;
     }
 
@@ -162,7 +163,7 @@ public class AuditColumns {
      * Set the deletedBy.
      * @param deletedBy - the User to set
      */
-    public void setDeletedBy(User deletedBy) {
+    public void setDeletedBy(Long deletedBy) {
         this.deletedBy = deletedBy;
     }
 
