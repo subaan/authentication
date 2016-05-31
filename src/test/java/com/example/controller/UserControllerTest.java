@@ -6,6 +6,7 @@ import com.example.model.Domain;
 import com.example.model.User;
 import com.example.service.UserService;
 import com.example.util.infrastructure.security.TokenService;
+import com.example.util.locale.MessageByLocaleService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -75,6 +76,12 @@ public class UserControllerTest {
 
     @Autowired
     private TokenService tokenService;
+
+    /**
+     * Locale service.
+     */
+    @Autowired
+    private MessageByLocaleService messageByLocaleService;
 
 
     /**
@@ -286,7 +293,7 @@ public class UserControllerTest {
     private void setRequestHeaders() {
 
         this.document.snippets(requestHeaders(headerWithName(GenericConstants.AUTHENTICATION_HEADER_TOKEN)
-                .description("The authentication unique token.")));
+                .description(messageByLocaleService.getMessage("auth.token.description"))));
 
     }
 
@@ -298,30 +305,29 @@ public class UserControllerTest {
 
         this.document.snippets(
                 responseFields(
-                        fieldWithPath("[].id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
-                        fieldWithPath("[].username").description("The user name of the user. "),
-                        fieldWithPath("[].emailId").description("The unique email Id for the user. e.g 'username@example.com' "),
-                        fieldWithPath("[].domain.id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
-                        fieldWithPath("[].domain.aliasName").description("Aliasname of the domain. e.g. 'Root' "),
-                        fieldWithPath("[].domain.organisationName").description("The organisation name of the domain. e.g 'Apptronix' "),
-                        fieldWithPath("[].domain.emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
-                        fieldWithPath("[].domain.billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
-                        fieldWithPath("[].domain.streetAddress").description("The organisation street address in detail "),
-                        fieldWithPath("[].domain.city").description("The organisation city"),
-                        fieldWithPath("[].domain.state").description("The organisation state "),
-                        fieldWithPath("[].domain.country").description("The organisation country "),
-                        fieldWithPath("[].domain.zipCode").description("The organisation zip code. e.g. '435234' "),
-                        fieldWithPath("[].domain.phoneNumber").description("The organisation phone number. e.g. '9789654567'"),
-                        fieldWithPath("[].domain.status").description("The status of domain. APPROVAL_PENDING - Initial state when done signup, ACTIVE - The domain active state," +
-                                " SUSPENDED - The domain suspended state, CLOSED - The domain dead state.'"),
+                        fieldWithPath("[].id").description(messageByLocaleService.getMessage("common.id.description")),
+                        fieldWithPath("[].username").description(messageByLocaleService.getMessage("user.username.description")),
+                        fieldWithPath("[].emailId").description(messageByLocaleService.getMessage("user.emailId.description")),
+                        fieldWithPath("[].domain.id").description(messageByLocaleService.getMessage("common.id.description")),
+                        fieldWithPath("[].domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
+                        fieldWithPath("[].domain.organisationName").description(messageByLocaleService.getMessage("domain.organisationName.description")),
+                        fieldWithPath("[].domain.emailId").description(messageByLocaleService.getMessage("domain.emailId.description")),
+                        fieldWithPath("[].domain.billingEmailId").description(messageByLocaleService.getMessage("domain.billingEmailId.description")),
+                        fieldWithPath("[].domain.streetAddress").description(messageByLocaleService.getMessage("domain.streetAddress.description")),
+                        fieldWithPath("[].domain.city").description(messageByLocaleService.getMessage("domain.city.description")),
+                        fieldWithPath("[].domain.state").description(messageByLocaleService.getMessage("domain.state.description")),
+                        fieldWithPath("[].domain.country").description(messageByLocaleService.getMessage("domain.country.description")),
+                        fieldWithPath("[].domain.zipCode").description(messageByLocaleService.getMessage("domain.zipCode.description")),
+                        fieldWithPath("[].domain.phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
+                        fieldWithPath("[].domain.status").description(messageByLocaleService.getMessage("domain.status.description")),
                         fieldWithPath("[].domain.signupDate").type("Date")
-                                .description("The sign up date. e.g. 'MAR 11 2016 12:35:05'"),
-                        fieldWithPath("[].domain.updatedDate").type("Date").description("The domain updated date. e.g. 'MAR 15 2016 12:35:05'"),
-                        fieldWithPath("[].domain.approvedDate").type("Date").description("The domain approved date. e.g. 'MAR 13 2016 12:35:05'"),
-                        fieldWithPath("[].status").description("The status of the user. ENABLED - The user active status, DISABLED - The user disabled status."),
-                        fieldWithPath("[].type").description("The type of the user"),
-                        fieldWithPath("[].createdDate").type("Date").description("The user created date."),
-                        fieldWithPath("[].updatedDate").type("Date").description("The user updated date.")
+                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
+                        fieldWithPath("[].domain.updatedDate").type("Date").description(messageByLocaleService.getMessage("domain.updatedDate.description")),
+                        fieldWithPath("[].domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
+                        fieldWithPath("[].status").description(messageByLocaleService.getMessage("user.status.description")),
+                        fieldWithPath("[].type").description(messageByLocaleService.getMessage("user.type.description")),
+                        fieldWithPath("[].createdDate").type("Date").description(messageByLocaleService.getMessage("user.createdDate.description")),
+                        fieldWithPath("[].updatedDate").type("Date").description(messageByLocaleService.getMessage("user.updatedDate.description"))
 
                 )
         );
@@ -334,30 +340,29 @@ public class UserControllerTest {
 
         this.document.snippets(
                 responseFields(
-                        fieldWithPath("id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
-                        fieldWithPath("username").description("The user name of the user. "),
-                        fieldWithPath("emailId").description("The unique email Id for the user. e.g 'username@example.com' "),
-                        fieldWithPath("domain.id").description("Unique identifier for the domain, auto generated, cannot be edited, or modified."),
-                        fieldWithPath("domain.aliasName").description("Aliasname of the domain. e.g. 'Root' "),
-                        fieldWithPath("domain.organisationName").description("The organisation name of the domain. e.g 'Apptronix' "),
-                        fieldWithPath("domain.emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
-                        fieldWithPath("domain.billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
-                        fieldWithPath("domain.streetAddress").description("The organisation street address in detail "),
-                        fieldWithPath("domain.city").description("The organisation city"),
-                        fieldWithPath("domain.state").description("The organisation state "),
-                        fieldWithPath("domain.country").description("The organisation country "),
-                        fieldWithPath("domain.zipCode").description("The organisation zip code. e.g. '435234' "),
-                        fieldWithPath("domain.phoneNumber").description("The organisation phone number. e.g. '9789654567'"),
-                        fieldWithPath("domain.status").description("The status of domain. APPROVAL_PENDING - Initial state when done signup, ACTIVE - The domain active state," +
-                                " SUSPENDED - The domain suspended state, CLOSED - The domain dead state.'"),
+                        fieldWithPath("id").description(messageByLocaleService.getMessage("common.id.description")),
+                        fieldWithPath("username").description(messageByLocaleService.getMessage("user.username.description")),
+                        fieldWithPath("emailId").description(messageByLocaleService.getMessage("user.emailId.description")),
+                        fieldWithPath("domain.id").description(messageByLocaleService.getMessage("common.id.description")),
+                        fieldWithPath("domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
+                        fieldWithPath("domain.organisationName").description(messageByLocaleService.getMessage("domain.organisationName.description")),
+                        fieldWithPath("domain.emailId").description(messageByLocaleService.getMessage("domain.emailId.description")),
+                        fieldWithPath("domain.billingEmailId").description(messageByLocaleService.getMessage("domain.billingEmailId.description")),
+                        fieldWithPath("domain.streetAddress").description(messageByLocaleService.getMessage("domain.streetAddress.description")),
+                        fieldWithPath("domain.city").description(messageByLocaleService.getMessage("domain.city.description")),
+                        fieldWithPath("domain.state").description(messageByLocaleService.getMessage("domain.state.description")),
+                        fieldWithPath("domain.country").description(messageByLocaleService.getMessage("domain.country.description")),
+                        fieldWithPath("domain.zipCode").description(messageByLocaleService.getMessage("domain.zipCode.description")),
+                        fieldWithPath("domain.phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
+                        fieldWithPath("domain.status").description(messageByLocaleService.getMessage("domain.status.description")),
                         fieldWithPath("domain.signupDate").type("Date")
-                                .description("The sign up date. e.g. 'MAR 11 2016 12:35:05'"),
-                        fieldWithPath("domain.updatedDate").type("Date").description("The domain updated date. e.g. 'MAR 15 2016 12:35:05'"),
-                        fieldWithPath("domain.approvedDate").type("Date").description("The domain approved date. e.g. 'MAR 13 2016 12:35:05'"),
-                        fieldWithPath("status").description("The status of the user. ENABLED - The user active status, DISABLED - The user disabled status."),
-                        fieldWithPath("type").description("The type of the user"),
-                        fieldWithPath("createdDate").type("Date").description("The user created date."),
-                        fieldWithPath("updatedDate").type("Date").description("The user updated date.")
+                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
+                        fieldWithPath("domain.updatedDate").type("Date").description(messageByLocaleService.getMessage("domain.updatedDate.description")),
+                        fieldWithPath("domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
+                        fieldWithPath("status").description(messageByLocaleService.getMessage("user.status.description")),
+                        fieldWithPath("type").description(messageByLocaleService.getMessage("user.type.description")),
+                        fieldWithPath("createdDate").type("Date").description(messageByLocaleService.getMessage("user.createdDate.description")),
+                        fieldWithPath("updatedDate").type("Date").description(messageByLocaleService.getMessage("user.updatedDate.description"))
 
                 )
         );
@@ -370,23 +375,22 @@ public class UserControllerTest {
 
         this.document.snippets(
                 requestFields(
-                        fieldWithPath("username").description("The user name of the user. "),
-                        fieldWithPath("emailId").description("The unique email Id for the user. e.g 'username@example.com' "),
+                        fieldWithPath("username").description(messageByLocaleService.getMessage("user.username.description")),
+                        fieldWithPath("emailId").description(messageByLocaleService.getMessage("user.emailId.description")),
                         fieldWithPath("password").description("The user password."),
-                        fieldWithPath("domain.aliasName").description("Aliasname of the domain. e.g. 'Root' "),
+                        fieldWithPath("domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
                         fieldWithPath("domain.organisationName").description("The organisation name of the domain. e.g 'Appranix' "),
-                        fieldWithPath("domain.emailId").description("The unique email Id for the domain. e.g 'username@example.com' "),
-                        fieldWithPath("domain.billingEmailId").description("The billing email Id of the domain. Billing related information and alerts received by this mail e.g 'username@organisation-name.com' "),
-                        fieldWithPath("domain.streetAddress").description("The organisation street address in detail "),
-                        fieldWithPath("domain.city").description("The organisation city"),
-                        fieldWithPath("domain.state").description("The organisation state "),
-                        fieldWithPath("domain.country").description("The organisation country "),
-                        fieldWithPath("domain.zipCode").description("The organisation zip code. e.g. '435234' "),
-                        fieldWithPath("domain.status").description("The status of domain. APPROVAL_PENDING - Initial state when done signup, ACTIVE - The domain active state," +
-                                " SUSPENDED - The domain suspended state, CLOSED - The domain dead state.'"),
-                        fieldWithPath("domain.phoneNumber").description("The organisation phone number. e.g. '9789654567'"),
-                        fieldWithPath("status").description("The status of the user. ENABLED - The user active status, DISABLED - The user disabled status."),
-                        fieldWithPath("type").description("The type of the user")
+                        fieldWithPath("domain.emailId").description(messageByLocaleService.getMessage("domain.emailId.description")),
+                        fieldWithPath("domain.billingEmailId").description(messageByLocaleService.getMessage("domain.billingEmailId.description")),
+                        fieldWithPath("domain.streetAddress").description(messageByLocaleService.getMessage("domain.streetAddress.description")),
+                        fieldWithPath("domain.city").description(messageByLocaleService.getMessage("domain.city.description")),
+                        fieldWithPath("domain.state").description(messageByLocaleService.getMessage("domain.state.description")),
+                        fieldWithPath("domain.country").description(messageByLocaleService.getMessage("domain.country.description")),
+                        fieldWithPath("domain.zipCode").description(messageByLocaleService.getMessage("domain.zipCode.description")),
+                        fieldWithPath("domain.status").description(messageByLocaleService.getMessage("domain.status.description")),
+                        fieldWithPath("domain.phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
+                        fieldWithPath("status").description(messageByLocaleService.getMessage("user.status.description")),
+                        fieldWithPath("type").description(messageByLocaleService.getMessage("user.type.description"))
         ));
 
     }
