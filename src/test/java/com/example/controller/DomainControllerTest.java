@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -245,7 +246,7 @@ public class DomainControllerTest {
     public void update() {
         try {
             Domain mockDomain = this.buildMockDomain();
-            mockDomain.setUpdatedDate(new Date());
+            mockDomain.setLastModifiedDateTime(new Date());
             BDDMockito.when(mockDomainService.update(any(Domain.class)))
                     .thenReturn(mockDomain);
 
@@ -323,35 +324,45 @@ public class DomainControllerTest {
         this.document.snippets(
                 responseFields(
                         fieldWithPath("[].id")
-                            .description(messageByLocaleService.getMessage("common.id.description")),
+                                .description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("[].aliasName")
-                            .description(messageByLocaleService.getMessage("domain.aliasName.description")),
+                                .description(messageByLocaleService.getMessage("domain.aliasName.description")),
                         fieldWithPath("[].organisationName")
-                            .description(messageByLocaleService.getMessage("domain.organisationName.description")),
+                                .description(messageByLocaleService.getMessage("domain.organisationName.description")),
                         fieldWithPath("[].emailId")
-                            .description(messageByLocaleService.getMessage("domain.emailId.description")),
+                                .description(messageByLocaleService.getMessage("domain.emailId.description")),
                         fieldWithPath("[].billingEmailId")
-                            .description(messageByLocaleService.getMessage("domain.billingEmailId.description")),
+                                .description(messageByLocaleService.getMessage("domain.billingEmailId.description")),
                         fieldWithPath("[].streetAddress")
-                            .description(messageByLocaleService.getMessage("domain.streetAddress.description")),
+                                .description(messageByLocaleService.getMessage("domain.streetAddress.description")),
                         fieldWithPath("[].city")
-                            .description(messageByLocaleService.getMessage("domain.city.description")),
+                                .description(messageByLocaleService.getMessage("domain.city.description")),
                         fieldWithPath("[].state")
-                            .description(messageByLocaleService.getMessage("domain.state.description")),
+                                .description(messageByLocaleService.getMessage("domain.state.description")),
                         fieldWithPath("[].country")
-                            .description(messageByLocaleService.getMessage("domain.country.description")),
+                                .description(messageByLocaleService.getMessage("domain.country.description")),
                         fieldWithPath("[].zipCode")
-                            .description(messageByLocaleService.getMessage("domain.zipCode.description")),
+                                .description(messageByLocaleService.getMessage("domain.zipCode.description")),
                         fieldWithPath("[].phoneNumber")
-                            .description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
+                                .description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
                         fieldWithPath("[].status")
-                            .description(messageByLocaleService.getMessage("domain.status.description")),
-                        fieldWithPath("[].signupDate").type("Date")
-                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
-                        fieldWithPath("[].updatedDate").type("Date")
-                            .description(messageByLocaleService.getMessage("domain.updatedDate.description")),
+                                .description(messageByLocaleService.getMessage("domain.status.description")),
+                        fieldWithPath("[].createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("[].updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("[].deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("[].createdDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("[].lastModifiedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("[].deletedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
+                        fieldWithPath("[].approvedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.approvedBy.description")),
                         fieldWithPath("[].approvedDate").type("Date")
-                            .description(messageByLocaleService.getMessage("domain.approvedDate.description"))
+                                .description(messageByLocaleService.getMessage("domain.approvedDate.description"))
                 )
         );
     }
@@ -375,10 +386,22 @@ public class DomainControllerTest {
                         fieldWithPath("zipCode").description(messageByLocaleService.getMessage("domain.zipCode.description")),
                         fieldWithPath("phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
                         fieldWithPath("status").description(messageByLocaleService.getMessage("domain.status.description")),
-                        fieldWithPath("signupDate").type("Date")
-                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
-                        fieldWithPath("updatedDate").type("Date").description(messageByLocaleService.getMessage("domain.updatedDate.description")),
-                        fieldWithPath("approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description"))
+                        fieldWithPath("createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("createdDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("lastModifiedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("deletedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
+                        fieldWithPath("approvedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.approvedBy.description")),
+                        fieldWithPath("approvedDate").type("Date")
+                                .description(messageByLocaleService.getMessage("domain.approvedDate.description"))
                 )
         );
     }
@@ -426,7 +449,7 @@ public class DomainControllerTest {
         domain.setZipCode("546789");
         domain.setPhoneNumber("9879678546");
         domain.setStatus(Domain.DomainStatus.ACTIVE);
-        domain.setSignupDate(new Date());
+        domain.setCreatedDateTime(new Date());
 
         return domain;
     }
@@ -453,7 +476,7 @@ public class DomainControllerTest {
         domainY.setZipCode("546889");
         domainY.setPhoneNumber("9879238546");
         domainY.setStatus(Domain.DomainStatus.APPROVAL_PENDING);
-        domainY.setSignupDate(new Date());
+        domainY.setCreatedDateTime(new Date());
         domains.add(domainY);
 
         return domains;

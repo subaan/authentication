@@ -142,7 +142,7 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
         domain.setZipCode(domainVO.getZipCode());
         domain.setPhoneNumber(domainVO.getPhoneNumber());
         domain.setStatus(Domain.DomainStatus.APPROVAL_PENDING);
-        domain.setSignupDate(new Date());
+        domain.setCreatedDateTime(new Date());
 
         //Set user values
         User user = new User();
@@ -185,7 +185,7 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
         existingDomain.setZipCode(domainVO.getZipCode());
         existingDomain.setPhoneNumber(domainVO.getPhoneNumber());
         existingDomain.setStatus(Domain.DomainStatus.valueOf(domainVO.getStatus()));
-        existingDomain.setUpdatedDate(new Date());
+        existingDomain.setLastModifiedDateTime(new Date());
         domainService.update(existingDomain);
 
         return "{\"result\":\"success\"}";
@@ -220,7 +220,7 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
         Domain existingDomain = domainService.find(id);
         //Update status to 'APPROVAL_PENDING' to 'ACTIVE'
         existingDomain.setStatus(Domain.DomainStatus.ACTIVE);
-        existingDomain.setUpdatedDate(new Date());
+        existingDomain.setLastModifiedDateTime(new Date());
         domainService.update(existingDomain);
 
         return "{\"result\":\"success\"}";

@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -326,15 +327,30 @@ public class GroupControllerTest {
                         fieldWithPath("[].users.[].domain.zipCode").description(messageByLocaleService.getMessage("domain.zipCode.description")),
                         fieldWithPath("[].users.[].domain.phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
                         fieldWithPath("[].users.[].domain.status").description(messageByLocaleService.getMessage("domain.status.description")),
-                        fieldWithPath("[].users.[].domain.signupDate").type("Date")
-                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
-                        fieldWithPath("[].users.[].domain.updatedDate").type("Date").description(messageByLocaleService.getMessage("domain.updatedDate.description")),
-                        fieldWithPath("[].users.[].domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
+                        fieldWithPath("[].users.[].domain.createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("[].users.[].domain.updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("[].users.[].domain.deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("[].users.[].domain.createdDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("[].users.[].domain.lastModifiedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("[].users.[].domain.deletedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
+                        fieldWithPath("[].users.[].domain.approvedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.approvedBy.description")),
+                        fieldWithPath("[].users.[].domain.approvedDate").type("Date")
+                                .description(messageByLocaleService.getMessage("domain.approvedDate.description")),
                         fieldWithPath("[].users.[].status").description(messageByLocaleService.getMessage("user.status.description")),
                         fieldWithPath("[].users.[].type").description(messageByLocaleService.getMessage("user.type.description")),
-                        fieldWithPath("[].users.[].createdBy").description(messageByLocaleService.getMessage("audit.createdBy.description")),
-                        fieldWithPath("[].users.[].updatedBy").description(messageByLocaleService.getMessage("audit.updatedBy.description")),
-                        fieldWithPath("[].users.[].deletedBy").description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("[].users.[].createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("[].users.[].updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("[].users.[].deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
                         fieldWithPath("[].users.[].createdDateTime").type("Date").description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
                         fieldWithPath("[].users.[].lastModifiedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
                         fieldWithPath("[].users.[].deletedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
@@ -350,14 +366,30 @@ public class GroupControllerTest {
                         fieldWithPath("[].domain.zipCode").description(messageByLocaleService.getMessage("domain.zipCode.description")),
                         fieldWithPath("[].domain.phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
                         fieldWithPath("[].domain.status").description(messageByLocaleService.getMessage("domain.status.description")),
-                        fieldWithPath("[].domain.signupDate").type("Date")
-                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
-                        fieldWithPath("[].domain.updatedDate").type("Date").description(messageByLocaleService.getMessage("domain.updatedDate.description")),
-                        fieldWithPath("[].domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
-                        fieldWithPath("[].deleted").description(messageByLocaleService.getMessage("common.deleted.description")),
-                        fieldWithPath("[].createdBy").description(messageByLocaleService.getMessage("audit.createdBy.description")),
-                        fieldWithPath("[].updatedBy").description(messageByLocaleService.getMessage("audit.updatedBy.description")),
-                        fieldWithPath("[].deletedBy").description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("[].domain.createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("[].domain.updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("[].domain.deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("[].domain.createdDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("[].domain.lastModifiedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("[].domain.deletedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
+                        fieldWithPath("[].domain.approvedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.approvedBy.description")),
+                        fieldWithPath("[].domain.approvedDate").type("Date")
+                                .description(messageByLocaleService.getMessage("domain.approvedDate.description")),
+                        fieldWithPath("[].deleted")
+                                .description(messageByLocaleService.getMessage("common.deleted.description")),
+                        fieldWithPath("[].createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("[].updatedBy")
+                                .type(JsonFieldType.NUMBER).description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("[].deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
                         fieldWithPath("[].createdDateTime").type("Date").description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
                         fieldWithPath("[].lastModifiedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
                         fieldWithPath("[].deletedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.deletedDateTime.description"))
@@ -391,15 +423,30 @@ public class GroupControllerTest {
                         fieldWithPath("users.[].domain.phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
                         fieldWithPath("users.[].domain.status").description("The status of domain. APPROVAL_PENDING - Initial state when done signup, ACTIVE - The domain active state," +
                                 " SUSPENDED - The domain suspended state, CLOSED - The domain dead state.'"),
-                        fieldWithPath("users.[].domain.signupDate").type("Date")
-                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
-                        fieldWithPath("users.[].domain.updatedDate").type("Date").description(messageByLocaleService.getMessage("domain.updatedDate.description")),
-                        fieldWithPath("users.[].domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
+                        fieldWithPath("users.[].domain.createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("users.[].domain.updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("users.[].domain.deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("users.[].domain.createdDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("users.[].domain.lastModifiedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("users.[].domain.deletedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
+                        fieldWithPath("users.[].domain.approvedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.approvedBy.description")),
+                        fieldWithPath("users.[].domain.approvedDate").type("Date")
+                                .description(messageByLocaleService.getMessage("domain.approvedDate.description")),
                         fieldWithPath("users.[].status").description(messageByLocaleService.getMessage("user.status.description")),
                         fieldWithPath("users.[].type").description(messageByLocaleService.getMessage("user.type.description")),
-                        fieldWithPath("users.[].createdBy").description(messageByLocaleService.getMessage("audit.createdBy.description")),
-                        fieldWithPath("users.[].updatedBy").description(messageByLocaleService.getMessage("audit.updatedBy.description")),
-                        fieldWithPath("users.[].deletedBy").description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("users.[].createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("users.[].updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("users.[].deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
                         fieldWithPath("users.[].createdDateTime").type("Date").description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
                         fieldWithPath("users.[].lastModifiedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
                         fieldWithPath("users.[].deletedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
@@ -415,14 +462,29 @@ public class GroupControllerTest {
                         fieldWithPath("domain.zipCode").description(messageByLocaleService.getMessage("domain.zipCode.description")),
                         fieldWithPath("domain.phoneNumber").description(messageByLocaleService.getMessage("domain.phoneNumber.description")),
                         fieldWithPath("domain.status").description(messageByLocaleService.getMessage("domain.status.description")),
-                        fieldWithPath("domain.signupDate").type("Date")
-                                .description(messageByLocaleService.getMessage("domain.signupDate.description")),
-                        fieldWithPath("domain.updatedDate").type("Date").description(messageByLocaleService.getMessage("domain.updatedDate.description")),
-                        fieldWithPath("domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
+                        fieldWithPath("domain.createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("domain.updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("domain.deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("domain.createdDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("domain.lastModifiedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("domain.deletedDateTime").type("Date")
+                                .description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
+                        fieldWithPath("domain.approvedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.approvedBy.description")),
+                        fieldWithPath("domain.approvedDate").type("Date")
+                                .description(messageByLocaleService.getMessage("domain.approvedDate.description")),
                         fieldWithPath("deleted").description("The soft delete value in boolean"),
-                        fieldWithPath("createdBy").description(messageByLocaleService.getMessage("audit.createdBy.description")),
-                        fieldWithPath("updatedBy").description(messageByLocaleService.getMessage("audit.updatedBy.description")),
-                        fieldWithPath("deletedBy").description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("createdBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("updatedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("deletedBy").type(JsonFieldType.NUMBER)
+                                .description(messageByLocaleService.getMessage("audit.deletedBy.description")),
                         fieldWithPath("createdDateTime").type("Date").description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
                         fieldWithPath("lastModifiedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
                         fieldWithPath("deletedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.deletedDateTime.description"))
@@ -540,7 +602,7 @@ public class GroupControllerTest {
         domain.setZipCode("546789");
         domain.setPhoneNumber("9879678546");
         domain.setStatus(Domain.DomainStatus.ACTIVE);
-        domain.setSignupDate(new Date());
+        domain.setCreatedDateTime(new Date());
 
         return domain;
     }

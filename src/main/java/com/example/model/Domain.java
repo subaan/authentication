@@ -1,19 +1,10 @@
 package com.example.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.persistence.Temporal;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
 
 import java.text.SimpleDateFormat;
@@ -22,6 +13,7 @@ import java.util.Locale;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,7 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * Created by Abdul on 18/5/16.
  */
 @Entity
-public class Domain {
+public class Domain extends AuditColumns {
 
     /** Auto generated ID */
     @Id
@@ -103,20 +95,17 @@ public class Domain {
         CLOSED
     }
 
-    /** The domain created date*/
-    @CreatedDate
-    @DateTimeFormat(style = "M-")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date signupDate;
-
-    /** The domain last modified date */
-    @LastModifiedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedDate;
+    /** The boolean value to represent soft delete */
+    @JsonIgnore
+    private boolean deleted = false;
 
     /** The domain approved date*/
     @Temporal(TemporalType.TIMESTAMP)
     private Date approvedDate;
+
+    /** Approved by user. */
+    @JoinColumn(name = "approved_user_id")
+    private Long approvedBy;
 
     @Transient
     @JsonIgnore
@@ -314,47 +303,19 @@ public class Domain {
     }
 
     /**
-     * Get the signup date.
-     * @return the user signed date.
+     * Get the boolean value isDeleted.
+     * @return the boolean value.
      */
-    public Date getSignupDate() {
-        if(this.signupDate == null) {
-            try {
-                return format.parse(new Date().toString());
-            } catch (Exception ex) {
-                return new Date();
-            }
-        } else {
-            try {
-                return format.parse(signupDate.toString());
-            } catch (Exception ex) {
-                return signupDate;
-            }
-        }
+    public boolean isDeleted() {
+        return deleted;
     }
 
     /**
-     * Set the domain signed date.
-     * @param signupDate - user signed date.
+     * Set the new value of deleted.
+     * @param deleted - the deleted.
      */
-    public void setSignupDate(Date signupDate) {
-        this.signupDate = signupDate;
-    }
-
-    /**
-     * Get the updated date.
-     * @return the user updated date.
-     */
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    /**
-     * Set the user updated date.
-     * @param updatedDate - user updated date.
-     */
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     /**
@@ -373,5 +334,20 @@ public class Domain {
         this.approvedDate = approvedDate;
     }
 
+    /**
+     * Get the approvedBy.
+     * @return approvedBy
+     */
+    public Long getApprovedBy() {
+        return approvedBy;
+    }
+
+    /**
+     * Set the approvedBy.
+     * @param approvedBy - the User to set
+     */
+    public void setApprovedBy(Long approvedBy) {
+        this.approvedBy = approvedBy;
+    }
 
 }
