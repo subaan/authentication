@@ -31,20 +31,6 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
     /** External service authentivator. */
     private ExternalServiceAuthenticator externalServiceAuthenticator;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private DomainService domainService;
-
-    /** Admin username. */
-    @Value("${backend.admin.username}")
-    private String backendAdminUsername;
-
-    /** Admin password. */
-    @Value("${backend.admin.password}")
-    private String backendAdminPassword;
-
     /**
      * Parameterized constructor.
      * @param tokenService to set
@@ -72,49 +58,7 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
         HttpSession session = attr.getRequest().getSession(true);
         String domainName = session.getAttribute("domainName").toString();
 
-        User user = new User();
-
-        if(backendAdminUsername.equals(userName)) {
-            if(!backendAdminPassword.equals(password.get())) {
-                throw new BadCredentialsException("Invalid User Credentials");
-            }
-        } else {
-
-            if(domainName == null || domainName.equals("")) {
-                throw new DomainNameNotFoundException("Domain name not specified");
-            } else {
-
-                //Check user under the domain
-//                domainName = domainName.replace("\"", "");
-                Domain domain = domainService.findByAliasName(domainName);
-                System.out.println("DB domain is:  "+domain);
-                if(domain == null) {
-                    throw new DomainNameNotFoundException("Domain with name '" + domainName + "' not found");
-                }
-
-                //Check username
-                user = userService.findByUsername(userName);
-                if(user == null || !user.getUsername().equals(userName)) {
-                    throw new UsernameNotFoundException("User with name '" + username.get() + "' not found");
-                }
-
-                //Check user under the current domain
-                user = userService.findByUsernameAndDomain(userName, domain);
-                if(user == null || !user.getUsername().equals(userName)) {
-                    throw new UsernameNotFoundException("User with name '" + username.get() + "' not under the domain '"
-                    + domain.getAliasName() +"'");
-                }
-
-                //Check the credentials
-                user = userService.findByUsernameAndPasswordAndDomain(userName, password.get(), domain);
-                if(user == null) {
-                    throw new BadCredentialsException("Invalid User Credentials !");
-                }
-            }
-
-        }
-
-        AuthenticationWithToken resultOfAuthentication = externalServiceAuthenticator.authenticate(userName, password.get(), user.getDomain());
+        AuthenticationWithToken resultOfAuthentication = externalServiceAuthenticator.authenticate(username.get(), password.get(), domainName);
         String newToken = tokenService.generateNewToken();
         resultOfAuthentication.setToken(newToken);
         tokenService.store(newToken, resultOfAuthentication);

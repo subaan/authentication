@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.constants.GenericConstants;
-import com.example.model.CurrentUser;
 import com.example.model.Domain;
 import com.example.model.Group;
 import com.example.model.User;

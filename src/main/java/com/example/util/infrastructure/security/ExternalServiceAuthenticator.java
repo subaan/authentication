@@ -14,5 +14,5 @@ public interface ExternalServiceAuthenticator {
      * @param password to set
      * @return token
      */
-    AuthenticationWithToken authenticate(String username, String password, Domain domain);
+    AuthenticationWithToken authenticate(String username, String password, String domainName);
 }

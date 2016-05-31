@@ -51,7 +51,7 @@ public class AuthController  {
      */
     @RequestMapping(value = "/whoami", method = RequestMethod.GET)
     public User getCurrentUser(@CurrentUser User currentUser) {
-       return userService.findByUsernameAndDomain(currentUser.getUsername(), currentUser.getDomain());
+       return currentUser;
     }
 
     /**
