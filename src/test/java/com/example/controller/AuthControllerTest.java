@@ -347,8 +347,12 @@ public class AuthControllerTest {
                         fieldWithPath("domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
                         fieldWithPath("status").description(messageByLocaleService.getMessage("user.status.description")),
                         fieldWithPath("type").description(messageByLocaleService.getMessage("user.type.description")),
-                        fieldWithPath("createdDate").type("Date").description(messageByLocaleService.getMessage("user.createdDate.description")),
-                        fieldWithPath("updatedDate").type("Date").description(messageByLocaleService.getMessage("user.updatedDate.description"))
+                        fieldWithPath("createdBy").description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("updatedBy").description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("deletedBy").description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("createdDateTime").type("Date").description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("lastModifiedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("deletedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.deletedDateTime.description"))
 
                 )
         );
@@ -368,7 +372,8 @@ public class AuthControllerTest {
         userX.setDomain(this.buildMockDomain());
         userX.setStatus(User.UserStatus.ENABLED);
         userX.setType(User.UserType.DOMAIN_ADMIN);
-        userX.setCreatedDate(new Date());
+        userX.setCreatedDateTime(new Date());
+        userX.setCreatedBy(1L);
 
         return userX;
     }

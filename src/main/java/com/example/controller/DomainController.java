@@ -152,7 +152,7 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
         user.setDomain(domain);
         user.setStatus(User.UserStatus.ENABLED);
         user.setType(User.UserType.DOMAIN_ADMIN);
-        user.setCreatedDate(new Date());
+        user.setCreatedDateTime(new Date());
 
         domainService.createDomain(domain, user);
 

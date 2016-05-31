@@ -146,7 +146,7 @@ public class UserController extends CRUDController<User> implements ApiControlle
             user.setDomain(domain);
             user.setStatus(User.UserStatus.valueOf(userVO.getStatus()));
             user.setType(User.UserType.valueOf(userVO.getType()));
-            user.setCreatedDate(new Date());
+            user.setCreatedDateTime(new Date());
             userService.create(user);
 
             return "{\"result\":\"success\"}";
@@ -181,7 +181,7 @@ public class UserController extends CRUDController<User> implements ApiControlle
             existingUser.setEmailId(userVO.getEmailId());
             existingUser.setStatus(User.UserStatus.valueOf(userVO.getStatus()));
             existingUser.setType(User.UserType.valueOf(userVO.getType()));
-            existingUser.setUpdatedDate(new Date());
+            existingUser.setLastModifiedDateTime(new Date());
             userService.update(existingUser);
 
             return "{\"result\":\"success\"}";

@@ -16,7 +16,7 @@ import java.util.Date;
  * Created by Abdul on 18/5/16.
  */
 @Entity
-public class User {
+public class User extends AuditColumns {
 
     /** Auto generated ID */
     @Id
@@ -232,38 +232,5 @@ public class User {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
-    /**
-     * Get the user create date.
-     * @return the created date.
-     */
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    /**
-     * Set the created date of the user.
-     * @param createdDate - the new User created date.
-     */
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    /**
-     * Get the user updated date.
-     * @return the updated date.
-     */
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
-    /**
-     * Set the last modified date of the user.
-     * @param updatedDate - the User last modified date.
-     */
-    public void setUpdatedDate(Date updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
 
 }

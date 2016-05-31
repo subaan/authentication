@@ -332,8 +332,12 @@ public class GroupControllerTest {
                         fieldWithPath("[].users.[].domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
                         fieldWithPath("[].users.[].status").description(messageByLocaleService.getMessage("user.status.description")),
                         fieldWithPath("[].users.[].type").description(messageByLocaleService.getMessage("user.type.description")),
-                        fieldWithPath("[].users.[].createdDate").type("Date").description(messageByLocaleService.getMessage("user.createdDate.description")),
-                        fieldWithPath("[].users.[].updatedDate").type("Date").description(messageByLocaleService.getMessage("user.updatedDate.description")),
+                        fieldWithPath("[].users.[].createdBy").description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("[].users.[].updatedBy").description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("[].users.[].deletedBy").description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("[].users.[].createdDateTime").type("Date").description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("[].users.[].lastModifiedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("[].users.[].deletedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
                         fieldWithPath("[].domain.id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("[].domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
                         fieldWithPath("[].domain.organisationName").description(messageByLocaleService.getMessage("domain.organisationName.description")),
@@ -393,8 +397,12 @@ public class GroupControllerTest {
                         fieldWithPath("users.[].domain.approvedDate").type("Date").description(messageByLocaleService.getMessage("domain.approvedDate.description")),
                         fieldWithPath("users.[].status").description(messageByLocaleService.getMessage("user.status.description")),
                         fieldWithPath("users.[].type").description(messageByLocaleService.getMessage("user.type.description")),
-                        fieldWithPath("users.[].createdDate").type("Date").description(messageByLocaleService.getMessage("user.createdDate.description")),
-                        fieldWithPath("users.[].updatedDate").type("Date").description(messageByLocaleService.getMessage("user.updatedDate.description")),
+                        fieldWithPath("users.[].createdBy").description(messageByLocaleService.getMessage("audit.createdBy.description")),
+                        fieldWithPath("users.[].updatedBy").description(messageByLocaleService.getMessage("audit.updatedBy.description")),
+                        fieldWithPath("users.[].deletedBy").description(messageByLocaleService.getMessage("audit.deletedBy.description")),
+                        fieldWithPath("users.[].createdDateTime").type("Date").description(messageByLocaleService.getMessage("audit.createdDateTime.description")),
+                        fieldWithPath("users.[].lastModifiedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.lastModifiedDateTime.description")),
+                        fieldWithPath("users.[].deletedDateTime").type("Date").description(messageByLocaleService.getMessage("audit.deletedDateTime.description")),
                         fieldWithPath("domain.id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
                         fieldWithPath("domain.organisationName").description(messageByLocaleService.getMessage("domain.organisationName.description")),
@@ -484,7 +492,8 @@ public class GroupControllerTest {
         userY.setDomain(this.buildMockDomain());
         userY.setStatus(User.UserStatus.ENABLED);
         userY.setType(User.UserType.DOMAIN_USER);
-        userY.setCreatedDate(new Date());
+        userY.setCreatedDateTime(new Date());
+        userY.setCreatedBy(1L);
         users.add(userY);
 
         return users;
@@ -505,7 +514,8 @@ public class GroupControllerTest {
         userX.setDomain(this.buildMockDomain());
         userX.setStatus(User.UserStatus.ENABLED);
         userX.setType(User.UserType.DOMAIN_ADMIN);
-        userX.setCreatedDate(new Date());
+        userX.setCreatedDateTime(new Date());
+        userX.setCreatedBy(1L);
 
         return userX;
     }
