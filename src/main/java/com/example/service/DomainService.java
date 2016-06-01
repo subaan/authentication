@@ -3,6 +3,8 @@ package com.example.service;
 import com.example.model.Domain;
 import com.example.model.User;
 import com.example.util.domain.CRUDService;
+import com.example.util.domain.vo.PagingAndSorting;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,6 +12,25 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface DomainService extends CRUDService<Domain> {
+
+    /**
+     * This method get all user with specified by deleted value.
+     *
+     * @param deleted is the User is soft deleted.
+     * @return the user list.
+     */
+    Iterable<Domain> findAllByDeleted(boolean deleted);
+
+    /**
+     * This method is User to return the user list by deleted value.
+     *
+     * @param pagingAndSorting
+     * @param deleted is the user is soft deleted.
+     *
+     * @return entity
+     * @throws Exception if error occurs
+     */
+    Page<Domain> findAllByDeleted(PagingAndSorting pagingAndSorting, boolean deleted);
 
     /**
      * This method find domain with specified domain name.

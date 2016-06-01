@@ -41,6 +41,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<User> findAllByDeleted(PagingAndSorting pagingAndSorting, boolean deleted) {
+        return userRepository.findAllByDeleted(pagingAndSorting.toPageRequest(), deleted);
+    }
+
+    @Override
+    public Iterable<User> findAllByDeleted(boolean deleted) {
+        return userRepository.findAllByDeleted(deleted);
+    }
+
+    @Override
     public User find(Long id) throws Exception {
         return userRepository.findOne(id);
     }

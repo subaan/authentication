@@ -57,13 +57,16 @@ public class UserController extends CRUDController<User> implements ApiControlle
      * @throws Exception default exception.
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Iterable<User> list(@RequestParam(value = "domainId", required = false) Long domainId) throws  Exception {
+    public Iterable<User> list(@RequestParam(value = "domainId", required = false) Long domainId,
+                               @RequestParam(value = "deleted", required = false) Boolean deleted) throws  Exception {
 
-        if(domainId == null) {
-            return userService.findAll();
-        } else {
+        if(domainId != null) {
             Domain domain = domainService.find(domainId);
             return userService.findAllByDomain(domain);
+        } else if(deleted != null) {
+            return userService.findAllByDeleted(deleted);
+        } else {
+            return userService.findAll();
         }
     }
 
@@ -83,17 +86,22 @@ public class UserController extends CRUDController<User> implements ApiControlle
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<User> list(@RequestParam String sortBy, @RequestHeader(value = RANGE) String range,
                            @RequestParam(value = "domainId", required = false) Long domainId,
+                           @RequestParam(value = "deleted", required = false) Boolean deleted,
                            HttpServletRequest request, HttpServletResponse response) throws Exception {
         //Set default value if null
         range = SortingUtil.defaultIfNullorEmpty(range, "0-10");
         sortBy = SortingUtil.defaultIfNullorEmpty(sortBy, "id");
 
         PagingAndSorting page = new PagingAndSorting(range, sortBy, User.class);
-        Domain domain = new Domain();
+        Page<User> pageResponse = null;
         if(domainId != null) {
-            domain = domainService.find(domainId);
+            Domain domain = domainService.find(domainId);
+            pageResponse = userService.findAllByDomain(page, domain);
+        } else if(deleted != null) {
+            pageResponse = userService.findAllByDeleted(page, deleted);
+        } else {
+            pageResponse = userService.findAll(page);
         }
-        Page<User> pageResponse = domainId == null ? userService.findAll(page) : userService.findAllByDomain(page,domain);
         response.setHeader(GenericConstants.CONTENT_RANGE_HEADER, page.getPageHeaderValue(pageResponse));
         return pageResponse.getContent();
     }

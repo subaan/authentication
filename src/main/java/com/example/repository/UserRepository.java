@@ -36,6 +36,25 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     Page<User> findAllByDomain(Pageable pageable, Domain domain);
 
     /**
+     * This method get all User with specified by deleted value.
+     *
+     * @param deleted is the user is soft deleted.
+     * @return the group list.
+     */
+    Iterable<User> findAllByDeleted(boolean deleted);
+
+    /**
+     * This method is User to return the user list by deleted value.
+     *
+     * @param pageable the pageable object.
+     * @param deleted is the user is soft deleted.
+     *
+     * @return entity
+     * @throws Exception if error occurs
+     */
+    Page<User> findAllByDeleted(Pageable pageable, boolean deleted);
+
+    /**
      * This method find user with specified user name.
      *
      * @param username the username

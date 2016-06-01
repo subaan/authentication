@@ -48,8 +48,13 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
      * @throws Exception default exception.
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Iterable<Domain> list() throws Exception {
-        return domainService.findAll();
+    public Iterable<Domain> list(@RequestParam(value = "deleted", required = false) Boolean deleted) throws Exception {
+        if(deleted != null) {
+            return domainService.findAllByDeleted(deleted);
+        } else {
+            return domainService.findAll();
+        }
+
     }
 
     /**
@@ -61,20 +66,26 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
      * @param range the page range
      *        example request header: Range: items=0-9
      * @param request the http request object
+     * @param deleted is soft deleted domain
      * @param response to http response object
      * @return the domain list by page
      * @throws Exception the default exception.
      */
-    @Override
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<Domain> list(@RequestParam String sortBy, @RequestHeader(value = RANGE) String range,
+                             @RequestParam(value = "deleted", required = false) Boolean deleted,
                               HttpServletRequest request, HttpServletResponse response) throws Exception {
         //Set default values if null
         range = SortingUtil.defaultIfNullorEmpty(range, "0-10");
         sortBy = SortingUtil.defaultIfNullorEmpty(sortBy, "id");
 
         PagingAndSorting page = new PagingAndSorting(range, sortBy, Domain.class);
-        Page<Domain> pageResponse = domainService.findAll(page);
+        Page<Domain> pageResponse = null;
+         if(deleted != null) {
+            pageResponse = domainService.findAllByDeleted(page, deleted);
+        } else {
+            pageResponse = domainService.findAll(page);
+        }
         response.setHeader(GenericConstants.CONTENT_RANGE_HEADER, page.getPageHeaderValue(pageResponse));
         return pageResponse.getContent();
     }
@@ -224,6 +235,23 @@ public class DomainController extends CRUDController<Domain> implements ApiContr
         domainService.update(existingDomain);
 
         return "{\"result\":\"success\"}";
+    }
+
+    /**
+     * This method is used to delete the user. This is soft delete.
+     *
+     * @param id the user ID.
+     * @throws Exception
+     */
+    @RequestMapping(value="/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(@PathVariable(PATH_ID) Long id) throws Exception {
+
+        //Get existing Domain
+        Domain domain = domainService.find(id);
+        //Soft delete the user
+        domain.setDeleted(true);
+        domain.setDeletedDateTime(new Date());
+        domainService.update(domain);
     }
 
     /**

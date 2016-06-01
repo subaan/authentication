@@ -37,6 +37,16 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
+    public Page<Domain> findAllByDeleted(PagingAndSorting pagingAndSorting, boolean deleted) {
+        return domainRepository.findAllByDeleted(pagingAndSorting.toPageRequest(), deleted);
+    }
+
+    @Override
+    public Iterable<Domain> findAllByDeleted(boolean deleted) {
+        return domainRepository.findAllByDeleted(deleted);
+    }
+
+    @Override
     public Domain find(Long id) throws Exception {
         return domainRepository.findOne(id);
     }

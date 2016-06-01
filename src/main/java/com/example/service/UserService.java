@@ -43,6 +43,25 @@ public interface UserService extends CRUDService<User> {
     List<User> findAllByIds(List<Long> ids);
 
     /**
+     * This method get all user with specified by deleted value.
+     *
+     * @param deleted is the User is soft deleted.
+     * @return the user list.
+     */
+    Iterable<User> findAllByDeleted(boolean deleted);
+
+    /**
+     * This method is User to return the user list by deleted value.
+     *
+     * @param pagingAndSorting
+     * @param deleted is the user is soft deleted.
+     *
+     * @return entity
+     * @throws Exception if error occurs
+     */
+    Page<User> findAllByDeleted(PagingAndSorting pagingAndSorting, boolean deleted);
+
+    /**
      * This method find user with specified user name.
      *
      * @param username the username
