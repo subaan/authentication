@@ -31,6 +31,7 @@ import org.springframework.restdocs.RestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.snippet.Attributes;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -90,7 +91,7 @@ public class AuthControllerTest {
     private AuthController authController;
 
     @Autowired
-    ExternalServiceAuthenticator mockedExternalServiceAuthenticator;
+    private ExternalServiceAuthenticator mockedExternalServiceAuthenticator;
 
     /**
      * Locale service.
@@ -207,6 +208,31 @@ public class AuthControllerTest {
         } catch (Exception e) {
             e.printStackTrace(System.err);
             Assert.fail("Unexpected Exception");
+        }
+
+    }
+
+    @Test
+    public void invalidAdminCredentialsReturnsUnauthorized() {
+
+        try {
+            String password = "passw0rd";
+            BDDMockito.when(mockedExternalServiceAuthenticator.authenticate(anyString(), anyString(), null))
+                    .thenThrow(new BadCredentialsException("Invalid Credentials"));
+
+            JsonObject request = Json.createObjectBuilder()
+                    .add("username", username)
+                    .add("password", password)
+                    .build();
+
+            this.mockMvc.perform(post(ApiController.AUTHENTICATE_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(request.toString())
+                    .accept(MediaType.APPLICATION_JSON_VALUE))
+                    .andExpect(status().isUnauthorized());
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
         }
 
     }
