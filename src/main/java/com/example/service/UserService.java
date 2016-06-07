@@ -6,12 +6,14 @@ import com.example.util.domain.CRUDService;
 import com.example.util.domain.vo.PagingAndSorting;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Abdul on 20/5/16.
  */
+@Service
 public interface UserService extends CRUDService<User> {
 
     /**

@@ -3,6 +3,9 @@ package com.example.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.support.AbstractContextMapper;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,6 +30,12 @@ public class User extends AuditColumns {
     @NotNull
     @Size(min = 1, max = 20)
     private String username;
+
+    /** The first name of user */
+    private String firstName;
+
+    /** The last name of user */
+    private String lastName;
 
     /** The password of user */
     @JsonIgnore
@@ -119,6 +128,38 @@ public class User extends AuditColumns {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * Get the user first name.
+     * @return the user first name
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Set the first name.
+     * @param firstName - the User first name
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * Get the user last name.
+     * @return the user last name
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Set the last name.
+     * @param lastName - the User last name
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**

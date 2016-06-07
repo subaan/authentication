@@ -5,8 +5,14 @@ import com.example.model.User;
 import com.example.repository.DomainRepository;
 import com.example.repository.UserRepository;
 import com.example.util.domain.vo.PagingAndSorting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.ldap.core.ContextMapper;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +22,9 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+    /** Logger constant. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
