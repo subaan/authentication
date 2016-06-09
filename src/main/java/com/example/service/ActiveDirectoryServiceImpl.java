@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.model.User;
+import com.example.repository.UserRepository;
+import com.example.util.activedirectory.DirectoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.ldap.LdapName;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Created by Abdul on 3/6/16.
@@ -62,49 +65,24 @@ public class ActiveDirectoryServiceImpl implements ActiveDirectoryService {
         return user;
     }
 
-    private Attributes buildAttributes(User user) throws UnsupportedEncodingException {
-        Attributes userAttributes = new BasicAttributes();
-        userAttributes.put( "objectclass", "person" );
-        userAttributes.put( "objectclass", "user" );
-        userAttributes.put( "givenName", user.getFirstName() );
-        userAttributes.put( "sn", user.getLastName() );
-        userAttributes.put( "sAMAccountName", user.getUsername() );
-        // PASSWORD stuff
-        userAttributes.put("unicodepwd", this.encodePassword(user.getPassword()) );
+    @Override
+    public void create(User user) throws InvalidNameException, UnsupportedEncodingException {
 
-        userAttributes.put( "userPrincipalName", user.getEmailId() );
-        userAttributes.put( "userAccountControl", "512" );
-        userAttributes.put( "description", "Created via application" );
+        LOGGER.info("-------------- New user creation ------------");
 
+        DirContextAdapter dirContextAdapter = new DirContextAdapter();
 
-        return userAttributes;
+        //Create new user in Ad
+        LdapName newUserDN = DirectoryUtil.userToDistinguishedName( user );
+        Attributes userAttributes = DirectoryUtil.buildAttributes(user);
+        ldapTemplate.bind(newUserDN, null, userAttributes);
+
+        LOGGER.info("-------------- New user create success ------------");
     }
-
-    private byte[] encodePassword(String password) throws UnsupportedEncodingException {
-        String newQuotedPassword = "" + password + "";
-        return newQuotedPassword.getBytes("UTF-16LE");
-    }
-
-    private LdapName userToDistinguishedName( User user ) throws InvalidNameException {
-
-        LdapName ldapName = new LdapName("cn=user_"+user.getId());
-        ldapName.add("ou=kaveri");
-        return ldapName;
-    }
-
-
 
     private static class UserContextMapper implements ContextMapper {
         public Object mapFromContext(Object ctx) {
-            DirContextAdapter context = (DirContextAdapter)ctx;
-            User user = new User();
-            user.setUsername(context.getStringAttribute("sAMAccountName"));
-            user.setFirstName(context.getStringAttribute("givenName"));
-            user.setLastName(context.getStringAttribute("sn"));
-//            user.setFullName(context.getStringAttribute("cn"));
-//            p.setDescription(context.getStringAttribute("description"));
-//            p.setRoleNames(context.getStringAttributes("roleNames"));
-            return user;
+            return DirectoryUtil.setAttributes(ctx);
         }
     }
 }
