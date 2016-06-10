@@ -434,7 +434,7 @@ public class DomainControllerTest {
      * Build mock data.
      * @return the domain object.
      */
-    public Domain buildMockDomain() {
+    public static Domain buildMockDomain() {
 
         Domain domain = new Domain();
         domain.setId(1L);
@@ -458,9 +458,9 @@ public class DomainControllerTest {
      * Build mock list of domain.
      * @return mock list of domain.
      */
-    private List<Domain> buildMockDomainList() {
+    private static List<Domain> buildMockDomainList() {
         List<Domain> domains = new ArrayList<Domain>();
-        Domain domainX = this.buildMockDomain();
+        Domain domainX = buildMockDomain();
         domains.add(domainX);
 
         Domain domainY = new Domain();

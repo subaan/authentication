@@ -1,5 +1,6 @@
 package com.example.util.activedirectory;
 
+import com.example.constants.GenericConstants;
 import com.example.model.DirectoryConfig;
 import com.example.model.User;
 import org.springframework.ldap.core.DirContextAdapter;
@@ -50,15 +51,17 @@ public class DirectoryUtil {
     public static String getFilter(String searchValue, String searchBy) {
 
         AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectClass", "user"));
-        filter.and(new EqualsFilter("objectClass", "person"));
+        filter.and(new EqualsFilter(GenericConstants.DIRECTORY_ATTRIBUTE_OBJECT_CLASS,
+                GenericConstants.DIRECTORY_ATTRIBUTE_VALUE_USER));
+        filter.and(new EqualsFilter(GenericConstants.DIRECTORY_ATTRIBUTE_OBJECT_CLASS,
+                GenericConstants.DIRECTORY_ATTRIBUTE_VALUE_PERSON));
 //        Object ob =ldapTemplate.lookup("sAMAccountName=" + username);
 //        User user = (User) ldapTemplate.lookup("cn=" + username, new UserContextMapper());
         if(searchValue != null && !searchValue.isEmpty()) {
             if(searchBy.equals("username")) {
-                filter.and(new EqualsFilter("sAMAccountName", searchValue));
+                filter.and(new EqualsFilter(GenericConstants.DIRECTORY_ATTRIBUTE_SAM_ACCOUNT_NAME, searchValue));
             } else if(searchBy.equals("emailId")) {
-                filter.and(new EqualsFilter("userPrincipalName", searchValue));
+                filter.and(new EqualsFilter(GenericConstants.DIRECTORY_ATTRIBUTE_USER_PRINCIPAL_NAME, searchValue));
             }
         }
         return filter.encode();
@@ -106,18 +109,19 @@ public class DirectoryUtil {
      */
     public static Attributes buildAttributes(User user) throws UnsupportedEncodingException {
         Attributes userAttributes = new BasicAttributes();
-        userAttributes.put( "objectclass", "person" );
-        userAttributes.put( "objectclass", "user" );
-        userAttributes.put( "givenName", user.getFirstName() );
-        userAttributes.put( "sn", user.getLastName() );
-        userAttributes.put( "sAMAccountName", user.getUsername() );
+        userAttributes.put( GenericConstants.DIRECTORY_ATTRIBUTE_OBJECT_CLASS,
+                GenericConstants.DIRECTORY_ATTRIBUTE_VALUE_PERSON);
+        userAttributes.put( GenericConstants.DIRECTORY_ATTRIBUTE_OBJECT_CLASS,
+                GenericConstants.DIRECTORY_ATTRIBUTE_VALUE_USER);
+        userAttributes.put( GenericConstants.DIRECTORY_ATTRIBUTE_GIVEN_NAME, user.getFirstName() );
+        userAttributes.put( GenericConstants.DIRECTORY_ATTRIBUTE_SUR_NAME, user.getLastName() );
+        userAttributes.put( GenericConstants.DIRECTORY_ATTRIBUTE_SAM_ACCOUNT_NAME, user.getUsername() );
         // PASSWORD stuff
 //        userAttributes.put("unicodepwd", this.encodePassword(user.getPassword()) );
-        userAttributes.put("userPassword", DirectoryUtil.createUnicodePassword(user.getPassword()));
-
-        userAttributes.put( "userPrincipalName", user.getEmailId() );
 //        userAttributes.put( "userAccountControl", "512" ); //'512'- enabled account, 546- Disabled, Password Not Required
-        userAttributes.put( "description", "Created via application" );
+        userAttributes.put(GenericConstants.DIRECTORY_ATTRIBUTE_USER_PASSWORD, DirectoryUtil.createUnicodePassword(user.getPassword()));
+        userAttributes.put( GenericConstants.DIRECTORY_ATTRIBUTE_USER_PRINCIPAL_NAME, user.getEmailId() );
+        userAttributes.put( GenericConstants.DIRECTORY_ATTRIBUTE_DESCRIPTION, "Created via application" );
 
 
         return userAttributes;
@@ -133,9 +137,9 @@ public class DirectoryUtil {
 
         DirContextAdapter context = (DirContextAdapter)ctx;
         User user = new User();
-        user.setUsername(context.getStringAttribute("sAMAccountName"));
-        user.setFirstName(context.getStringAttribute("givenName"));
-        user.setLastName(context.getStringAttribute("sn"));
+        user.setUsername(context.getStringAttribute(GenericConstants.DIRECTORY_ATTRIBUTE_SAM_ACCOUNT_NAME));
+        user.setFirstName(context.getStringAttribute(GenericConstants.DIRECTORY_ATTRIBUTE_GIVEN_NAME));
+        user.setLastName(context.getStringAttribute(GenericConstants.DIRECTORY_ATTRIBUTE_SUR_NAME));
 //            user.setFullName(context.getStringAttribute("cn"));
 //            p.setDescription(context.getStringAttribute("description"));
 //            p.setRoleNames(context.getStringAttributes("roleNames"));
@@ -144,7 +148,8 @@ public class DirectoryUtil {
 
     public static LdapName userToDistinguishedName( User user ) throws InvalidNameException {
 
-        LdapName ldapName = new LdapName("cn="+user.getFirstName() + " " + user.getLastName());
+        LdapName ldapName = new LdapName(GenericConstants.DIRECTORY_ATTRIBUTE_COMMON_NAME +"="
+                +user.getFirstName() + " " + user.getLastName());
         return ldapName;
     }
 

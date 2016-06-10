@@ -43,4 +43,20 @@ public class GenericConstants {
 
     /** Constant used as form data as in authentication. */
     public static final String PASSWORD = "password";
+
+
+    /** AD Attributes */
+    public static final String DIRECTORY_ATTRIBUTE_OBJECT_CLASS = "objectClass";
+    public static final String DIRECTORY_ATTRIBUTE_SAM_ACCOUNT_NAME = "sAMAccountName";
+    public static final String DIRECTORY_ATTRIBUTE_GIVEN_NAME = "givenName";
+    public static final String DIRECTORY_ATTRIBUTE_SUR_NAME = "sn";
+    public static final String DIRECTORY_ATTRIBUTE_COMMON_NAME = "cn";
+    public static final String DIRECTORY_ATTRIBUTE_DESCRIPTION = "description";
+    public static final String DIRECTORY_ATTRIBUTE_USER_PASSWORD = "userPassword";
+    public static final String DIRECTORY_ATTRIBUTE_USER_PRINCIPAL_NAME = "userPrincipalName";
+    public static final String DIRECTORY_ATTRIBUTE_ROLE_NAMEs = "roleNames";
+
+    /** AD attribute values */
+    public static final String DIRECTORY_ATTRIBUTE_VALUE_USER = "user";
+    public static final String DIRECTORY_ATTRIBUTE_VALUE_PERSON = "person";
 }
