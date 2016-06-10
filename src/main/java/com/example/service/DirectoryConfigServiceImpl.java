@@ -1,10 +1,7 @@
 package com.example.service;
 
 import com.example.model.DirectoryConfig;
-import com.example.model.Domain;
-import com.example.model.Group;
 import com.example.repository.DirectoryConfigRepository;
-import com.example.repository.GroupRepository;
 import com.example.util.domain.vo.PagingAndSorting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 anonymous().disable().
                 exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint());
 
-        httpSecurity.addFilterBefore(new AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class).
+        httpSecurity.addFilterBefore(new AuthenticationFilter(activeDirectoryAuthenticationProvider(), authenticationManager()), BasicAuthenticationFilter.class).
                 addFilterBefore(new ManagementEndpointAuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
 
     }
@@ -76,6 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(domainUsernamePasswordAuthenticationProvider()).
                 authenticationProvider(backendAdminUsernamePasswordAuthenticationProvider()).
+                authenticationProvider(activeDirectoryAuthenticationProvider()).
                 authenticationProvider(tokenAuthenticationProvider());
     }
 
@@ -95,6 +96,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public ExternalServiceAuthenticator someExternalServiceAuthenticator() {
         return new SomeExternalServiceAuthenticator();
+    }
+
+    /**
+     * Factory method to get active directory authentication provider.
+     * @return AuthenticationProvider
+     */
+    @Bean
+    public ActiveDirectoryAuthenticationProvider activeDirectoryAuthenticationProvider() {
+        return new ActiveDirectoryAuthenticationProvider(tokenService());
     }
 
     /**

@@ -91,6 +91,7 @@ public class ActiveDirectoryServiceImpl implements ActiveDirectoryService {
     @Override
     public LdapTemplate ldapTemplate(Long domainId) {
         DirectoryConfig directoryConfig = directoryConfigRepository.findByDomainId(domainId);
+        LOGGER.info("AD service DirectoryConfig: {}", directoryConfig);
         return DirectoryUtil.ldapTemplate(directoryConfig);
     }
 

@@ -55,7 +55,7 @@ public class DirectoryUtil {
                 GenericConstants.DIRECTORY_ATTRIBUTE_VALUE_USER));
         filter.and(new EqualsFilter(GenericConstants.DIRECTORY_ATTRIBUTE_OBJECT_CLASS,
                 GenericConstants.DIRECTORY_ATTRIBUTE_VALUE_PERSON));
-//        Object ob =ldapTemplate.lookup("sAMAccountName=" + username);
+//        Object ob = ldapTemplate.lookup("sAMAccountName=" + username);
 //        User user = (User) ldapTemplate.lookup("cn=" + username, new UserContextMapper());
         if(searchValue != null && !searchValue.isEmpty()) {
             if(searchBy.equals("username")) {
@@ -64,7 +64,7 @@ public class DirectoryUtil {
                 filter.and(new EqualsFilter(GenericConstants.DIRECTORY_ATTRIBUTE_USER_PRINCIPAL_NAME, searchValue));
             }
         }
-        return filter.encode();
+        return filter.toString();
     }
 
     /**

@@ -19,6 +19,7 @@ import com.example.constants.GenericConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,6 +41,7 @@ import com.google.common.base.Strings;
  *
  */
 public class AuthenticationFilter extends GenericFilterBean {
+
     /** Logger constant. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationFilter.class);
 
@@ -52,14 +54,23 @@ public class AuthenticationFilter extends GenericFilterBean {
     /** Authentication manager attribute. */
     private AuthenticationManager authenticationManager;
 
+    /** Admin username. */
+    @Value("${backend.admin.username}")
+    private String backendAdminUsername;
+
     /** External service authenticator. */
     private ExternalServiceAuthenticator externalServiceAuthenticator;
 
+    /** Active  directory authenticator provider. */
+    private ActiveDirectoryAuthenticationProvider activeDirectoryAuthenticationProvider;
+
     /**
      * Parameterized constructor.
+     * @param activeDirectoryAuthenticationProvider to set
      * @param authenticationManager to set
      */
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(ActiveDirectoryAuthenticationProvider activeDirectoryAuthenticationProvider, AuthenticationManager authenticationManager) {
+        this.activeDirectoryAuthenticationProvider = activeDirectoryAuthenticationProvider;
         this.authenticationManager = authenticationManager;
     }
 

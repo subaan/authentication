@@ -44,19 +44,36 @@ public class GenericConstants {
     /** Constant used as form data as in authentication. */
     public static final String PASSWORD = "password";
 
-
-    /** AD Attributes */
+    /** AD attribute, used in search operation */
     public static final String DIRECTORY_ATTRIBUTE_OBJECT_CLASS = "objectClass";
+
+    /** AD attribute, used in search operation and it should be unique.  It represent account logon name of the user */
     public static final String DIRECTORY_ATTRIBUTE_SAM_ACCOUNT_NAME = "sAMAccountName";
+
+    /** AD attribute, used in search operation. It represent first name of the user */
     public static final String DIRECTORY_ATTRIBUTE_GIVEN_NAME = "givenName";
+
+    /** AD attribute, used in search operation. It represent last name of the user */
     public static final String DIRECTORY_ATTRIBUTE_SUR_NAME = "sn";
+
+    /** AD attribute, used in search operation. It represent account common name */
     public static final String DIRECTORY_ATTRIBUTE_COMMON_NAME = "cn";
+
+    /** AD attribute, used in search operation. It represent user description */
     public static final String DIRECTORY_ATTRIBUTE_DESCRIPTION = "description";
+
+    /** AD attribute, used in search operation. It represent user password */
     public static final String DIRECTORY_ATTRIBUTE_USER_PASSWORD = "userPassword";
+
+    /** AD attribute, used in search operation. It represent user email ID */
     public static final String DIRECTORY_ATTRIBUTE_USER_PRINCIPAL_NAME = "userPrincipalName";
+
+    /** AD attribute, used in search operation. It represent user role list */
     public static final String DIRECTORY_ATTRIBUTE_ROLE_NAMEs = "roleNames";
 
-    /** AD attribute values */
+    /** Attribute objectClass value. */
     public static final String DIRECTORY_ATTRIBUTE_VALUE_USER = "user";
+
+    /** Attribute objectClass value. */
     public static final String DIRECTORY_ATTRIBUTE_VALUE_PERSON = "person";
 }
