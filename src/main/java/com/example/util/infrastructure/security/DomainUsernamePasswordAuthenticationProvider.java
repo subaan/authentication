@@ -28,7 +28,8 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
 
     /** Token service attribute. */
     private TokenService tokenService;
-    /** External service authentivator. */
+
+    /** External service authenticator. */
     private ExternalServiceAuthenticator externalServiceAuthenticator;
 
     /**

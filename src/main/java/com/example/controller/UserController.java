@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.InvalidNameException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -254,10 +255,11 @@ public class UserController extends CRUDController<User> implements ApiControlle
 
     @RequestMapping(value="/ldap", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseStatus(HttpStatus.OK)
-    public User getLdapUser(@RequestParam String username) {
+    public User getLdapUser(@RequestParam String username, @RequestParam Long domainId)throws InvalidNameException {
         LOGGER.info("Ldap User call ");
-        activeDirectoryService.findAll();
-        return activeDirectoryService.findByUsername(username);
+        activeDirectoryService.findAll(domainId);
+        activeDirectoryService.authenticate();
+        return activeDirectoryService.findByUsername(username, domainId);
     }
 
 }

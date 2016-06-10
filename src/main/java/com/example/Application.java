@@ -73,15 +73,15 @@ public class Application extends SpringBootServletInitializer {
     }
 
 
-    @Bean
-    @ConfigurationProperties(prefix="ldap.contextSource")
-    public LdapContextSource contextSource() {
-        LdapContextSource contextSource = new LdapContextSource();
-        return contextSource;
-    }
-
-    @Bean
-    public LdapTemplate ldapTemplate(ContextSource contextSource) {
-        return new LdapTemplate(contextSource);
-    }
+//    @Bean
+//    @ConfigurationProperties(prefix="ldap.contextSource")
+//    public LdapContextSource contextSource() {
+//        LdapContextSource contextSource = new LdapContextSource();
+//        return contextSource;
+//    }
+//
+//    @Bean
+//    public LdapTemplate ldapTemplate(ContextSource contextSource) {
+//        return new LdapTemplate(contextSource);
+//    }
 }

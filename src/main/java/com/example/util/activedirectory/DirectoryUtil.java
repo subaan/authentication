@@ -1,7 +1,12 @@
 package com.example.util.activedirectory;
 
+import com.example.model.DirectoryConfig;
 import com.example.model.User;
 import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.ldap.filter.AndFilter;
+import org.springframework.ldap.filter.EqualsFilter;
 
 import javax.naming.InvalidNameException;
 import javax.naming.directory.Attributes;
@@ -13,6 +18,51 @@ import java.io.UnsupportedEncodingException;
  * Created by Abdul on 9/6/16.
  */
 public class DirectoryUtil {
+
+
+    /**
+     * This method is used to configure the LDAP for connection
+     *
+     * @param directoryConfig the directoryConfig object
+     * @return the ldapTemplate
+     */
+    public static LdapTemplate ldapTemplate(DirectoryConfig directoryConfig) {
+
+        return new LdapTemplate(contextSource(directoryConfig));
+    }
+
+    /**
+     * This method is used to set ldap configuration detail.
+     *
+     * @param directoryConfig the directoryConfig object
+     * @return the contextSource
+     */
+    private static LdapContextSource contextSource(DirectoryConfig directoryConfig) {
+        LdapContextSource contextSource = new LdapContextSource();
+        contextSource.setUrl(directoryConfig.getUrl());
+        contextSource.setBase(directoryConfig.getBaseDN());
+        contextSource.setUserDn(directoryConfig.getUserDN());
+        contextSource.setPassword(directoryConfig.getPassword());
+        contextSource.afterPropertiesSet();
+        return contextSource;
+    }
+
+    public static String getFilter(String searchValue, String searchBy) {
+
+        AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectClass", "user"));
+        filter.and(new EqualsFilter("objectClass", "person"));
+//        Object ob =ldapTemplate.lookup("sAMAccountName=" + username);
+//        User user = (User) ldapTemplate.lookup("cn=" + username, new UserContextMapper());
+        if(searchValue != null && !searchValue.isEmpty()) {
+            if(searchBy.equals("username")) {
+                filter.and(new EqualsFilter("sAMAccountName", searchValue));
+            } else if(searchBy.equals("emailId")) {
+                filter.and(new EqualsFilter("userPrincipalName", searchValue));
+            }
+        }
+        return filter.encode();
+    }
 
     /**
      * This method is used to unicode the password for AD.
