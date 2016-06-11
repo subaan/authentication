@@ -92,7 +92,11 @@ public class ActiveDirectoryServiceImpl implements ActiveDirectoryService {
     public LdapTemplate ldapTemplate(Long domainId) {
         DirectoryConfig directoryConfig = directoryConfigRepository.findByDomainId(domainId);
         LOGGER.info("AD service DirectoryConfig: {}", directoryConfig);
-        return DirectoryUtil.ldapTemplate(directoryConfig);
+        if(directoryConfig != null) {
+            return DirectoryUtil.ldapTemplate(directoryConfig);
+        } else {
+            return null;
+        }
     }
 
     private static class UserContextMapper implements ContextMapper {

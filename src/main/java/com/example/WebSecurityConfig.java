@@ -48,8 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 anonymous().disable().
                 exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint());
 
-        httpSecurity.addFilterBefore(new AuthenticationFilter(activeDirectoryAuthenticationProvider(), authenticationManager()), BasicAuthenticationFilter.class).
-                addFilterBefore(new ManagementEndpointAuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new AuthenticationFilter(activeDirectoryAuthenticationProvider(), authenticationManager()), BasicAuthenticationFilter.class);
+//                addFilterBefore(new ManagementEndpointAuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
 
     }
 
@@ -74,9 +74,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(domainUsernamePasswordAuthenticationProvider()).
-                authenticationProvider(backendAdminUsernamePasswordAuthenticationProvider()).
+        auth.authenticationProvider(backendAdminUsernamePasswordAuthenticationProvider()).
                 authenticationProvider(activeDirectoryAuthenticationProvider()).
+                authenticationProvider(domainUsernamePasswordAuthenticationProvider()).
                 authenticationProvider(tokenAuthenticationProvider());
     }
 
@@ -122,7 +122,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public AuthenticationProvider backendAdminUsernamePasswordAuthenticationProvider() {
-        return new BackendAdminUsernamePasswordAuthenticationProvider();
+        return new BackendAdminUsernamePasswordAuthenticationProvider(tokenService());
     }
 
     /**

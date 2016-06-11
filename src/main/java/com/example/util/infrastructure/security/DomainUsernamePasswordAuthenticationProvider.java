@@ -5,6 +5,8 @@ import com.example.model.User;
 import com.example.service.DomainService;
 import com.example.service.UserService;
 import com.example.util.exceptions.DomainNameNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -26,6 +28,9 @@ import javax.servlet.http.HttpSession;
  */
 public class DomainUsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
+    /** Logger constant. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomainUsernamePasswordAuthenticationProvider.class);
+
     /** Token service attribute. */
     private TokenService tokenService;
 
@@ -45,30 +50,36 @@ public class DomainUsernamePasswordAuthenticationProvider implements Authenticat
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
+        LOGGER.info("<------ DB authentication provider --------->");
+
         @SuppressWarnings("unchecked")
         Optional<String> username = (Optional<String>) authentication.getPrincipal();
         @SuppressWarnings("unchecked")
         Optional<String> password = (Optional<String>) authentication.getCredentials();
+        String domainName = authentication.getDetails().toString();
 
         if (!username.isPresent() || !password.isPresent()) {
             throw new BadCredentialsException("Invalid User Credentials");
         }
         String userName = username.get();
-        ServletRequestAttributes attr = (ServletRequestAttributes)
-                RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
-        String domainName = session.getAttribute("domainName").toString();
+//        ServletRequestAttributes attr = (ServletRequestAttributes)
+//                RequestContextHolder.currentRequestAttributes();
+//        HttpSession session = attr.getRequest().getSession(true);
+//        String domainName = session.getAttribute("domainName").toString();
 
         AuthenticationWithToken resultOfAuthentication = externalServiceAuthenticator.authenticate(username.get(), password.get(), domainName);
-        String newToken = tokenService.generateNewToken();
-        resultOfAuthentication.setToken(newToken);
-        tokenService.store(newToken, resultOfAuthentication);
-
+        LOGGER.info("Authenticate : {}", resultOfAuthentication.isAuthenticated());
+        if(resultOfAuthentication.isAuthenticated()) {
+            LOGGER.info("User authenticate success");
+            String newToken = tokenService.generateNewToken();
+            resultOfAuthentication.setToken(newToken);
+            tokenService.store(newToken, resultOfAuthentication);
+        }
         return resultOfAuthentication;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        return authentication.equals(DomainUsernamePasswordWithToken.class);
     }
 }

@@ -15,18 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 
 /**
- * Domain username password authentication provider.
+ * Active directory authentication provider.
  *
  */
 public class ActiveDirectoryAuthenticationProvider implements AuthenticationProvider {
@@ -67,17 +65,17 @@ public class ActiveDirectoryAuthenticationProvider implements AuthenticationProv
         @SuppressWarnings("unchecked")
         Optional<String> password = (Optional<String>) authentication.getCredentials();
 
-        AuthenticationWithToken resultOfAuthentication = null;
+        AuthenticationWithToken resultOfAuthentication = new AuthenticationWithToken(username, password);
         if (!username.isPresent() || !password.isPresent()) {
             throw new BadCredentialsException("Invalid User Credentials");
         }
 
         String userName = username.get();
-        ServletRequestAttributes attr = (ServletRequestAttributes)
-                RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession(true);
-        String domainName = session.getAttribute("domainName").toString();
-
+//        ServletRequestAttributes attr = (ServletRequestAttributes)
+//                RequestContextHolder.currentRequestAttributes();
+//        HttpSession session = attr.getRequest().getSession(true);
+//        String domainName = session.getAttribute("domainName").toString();
+        String domainName = authentication.getDetails().toString();
         if(domainName == null || domainName.equals("")) {
             throw new DomainNameNotFoundException("Invalid User Credentials");
         }
@@ -86,10 +84,12 @@ public class ActiveDirectoryAuthenticationProvider implements AuthenticationProv
         if(domain == null) {
             throw new DomainNameNotFoundException("Invalid User Credentials");
         }
-        LOGGER.info("Domain ID: {} USername: {}, password: {}", domain.getId(), userName, password);
         //Authenticate with AD
         LdapTemplate ldapTemplate = activeDirectoryService.ldapTemplate(domain.getId());
-        boolean authenticate = ldapTemplate.authenticate("", DirectoryUtil.getFilter(userName, "username"), password.get());
+        boolean authenticate = false;
+        if(ldapTemplate != null) {
+            authenticate = ldapTemplate.authenticate("", DirectoryUtil.getFilter(userName, "username"), password.get());
+        }
         LOGGER.info("Authenticate: {}", authenticate);
 
         if(authenticate) {
@@ -104,14 +104,15 @@ public class ActiveDirectoryAuthenticationProvider implements AuthenticationProv
             tokenService.store(newToken, resultOfAuthentication);
             LOGGER.info("<===== User authenticated with AD succeed =====>");
         } else {
-            LOGGER.info("<===== User Authentication failed =====>");
+            LOGGER.info("<===== AD User Authentication failed =====>");
+            resultOfAuthentication.setAuthenticated(false);
+//            throw new BadCredentialsException("Invalid User Credentials");
         }
-        LOGGER.info("ResultOfAuthentication: {}", resultOfAuthentication);
         return resultOfAuthentication;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(AuthenticationWithToken.class);
+        return authentication.equals(ActiveDirectoryAuthenticationWithToken.class);
     }
 }

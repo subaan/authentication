@@ -40,10 +40,14 @@ public class DirectoryUtil {
      */
     private static LdapContextSource contextSource(DirectoryConfig directoryConfig) {
         LdapContextSource contextSource = new LdapContextSource();
-        contextSource.setUrl(directoryConfig.getUrl());
-        contextSource.setBase(directoryConfig.getBaseDN());
-        contextSource.setUserDn(directoryConfig.getUserDN());
-        contextSource.setPassword(directoryConfig.getPassword());
+        if(directoryConfig != null) {
+            contextSource.setUrl(directoryConfig.getUrl());
+            contextSource.setBase(directoryConfig.getBaseDN());
+            contextSource.setUserDn(directoryConfig.getUserDN());
+            contextSource.setPassword(directoryConfig.getPassword());
+        } else {
+            contextSource.setUrl("");
+        }
         contextSource.afterPropertiesSet();
         return contextSource;
     }
