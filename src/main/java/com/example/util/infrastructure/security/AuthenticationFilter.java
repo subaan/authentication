@@ -222,15 +222,20 @@ public class AuthenticationFilter extends GenericFilterBean {
     private Authentication tryToAuthenticateWithUsernameAndPassword(Optional<String> username, Optional<String> password,
                                                                     String domainName) {
         if(domainName == null || domainName.isEmpty()) {
+            //Authenticate application admin
             BackendAdminUsernamePasswordAuthenticationToken backendAdminUsernamePasswordAuthenticationToken = new BackendAdminUsernamePasswordAuthenticationToken(username, password);
             return tryToAuthenticate(backendAdminUsernamePasswordAuthenticationToken);
         } else {
-            //Active directory authenticated first
-            ActiveDirectoryAuthenticationWithToken requestAuthentication = new ActiveDirectoryAuthenticationWithToken(username, password);
-            requestAuthentication.setDomain(domainName);
+            boolean authenticateByAd = true;
+            Authentication authentication = null;
+            if(authenticateByAd) {
+                //Active directory authenticated first
+                ActiveDirectoryAuthenticationWithToken requestAuthentication = new ActiveDirectoryAuthenticationWithToken(username, password);
+                requestAuthentication.setDomain(domainName);
+                authentication = tryToAuthenticate(requestAuthentication);
+            }
 
-            Authentication authentication = tryToAuthenticate(requestAuthentication);
-            if(!authentication.isAuthenticated()) { //If aAD authentication fail, DB auth provider called
+            if(!authenticateByAd || (authenticateByAd && !authentication.isAuthenticated())) { //If AD authentication fail, DB auth provider called
                 DomainUsernamePasswordWithToken domainUsernamePasswordWithToken = new DomainUsernamePasswordWithToken(username, password);
                 domainUsernamePasswordWithToken.setDomain(domainName);
                 authentication = tryToAuthenticate(domainUsernamePasswordWithToken);
