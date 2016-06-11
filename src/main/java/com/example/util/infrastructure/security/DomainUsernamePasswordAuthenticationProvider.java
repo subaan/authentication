@@ -1,26 +1,12 @@
 package com.example.util.infrastructure.security;
 
-import com.example.model.Domain;
-import com.example.model.User;
-import com.example.service.DomainService;
-import com.example.service.UserService;
-import com.example.util.exceptions.DomainNameNotFoundException;
+import com.google.common.base.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-
-import com.google.common.base.Optional;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * Domain username password authentication provider.

@@ -33,6 +33,7 @@ public class DirectoryConfig extends AuditColumns {
 
     /** The domain id */
     @NotNull
+    @Column(unique=true)
     private Long domainId;
 
     /**
