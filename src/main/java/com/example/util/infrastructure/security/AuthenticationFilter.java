@@ -19,9 +19,10 @@ import com.example.constants.GenericConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -40,6 +41,7 @@ import com.google.common.base.Strings;
  *
  */
 public class AuthenticationFilter extends GenericFilterBean {
+
     /** Logger constant. */
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationFilter.class);
 
@@ -52,14 +54,23 @@ public class AuthenticationFilter extends GenericFilterBean {
     /** Authentication manager attribute. */
     private AuthenticationManager authenticationManager;
 
+    /** Admin username. */
+    @Value("${backend.admin.username}")
+    private String backendAdminUsername;
+
     /** External service authenticator. */
     private ExternalServiceAuthenticator externalServiceAuthenticator;
 
+    /** Active  directory authenticator provider. */
+    private ActiveDirectoryAuthenticationProvider activeDirectoryAuthenticationProvider;
+
     /**
      * Parameterized constructor.
+     * @param activeDirectoryAuthenticationProvider to set
      * @param authenticationManager to set
      */
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(ActiveDirectoryAuthenticationProvider activeDirectoryAuthenticationProvider, AuthenticationManager authenticationManager) {
+        this.activeDirectoryAuthenticationProvider = activeDirectoryAuthenticationProvider;
         this.authenticationManager = authenticationManager;
     }
 
@@ -107,11 +118,11 @@ public class AuthenticationFilter extends GenericFilterBean {
                 }
 
                 // Set domain name to session
-                HttpSession session = httpRequest.getSession(true);
-                session.setAttribute("domainName", domainName);
+//                HttpSession session = httpRequest.getSession(true);
+//                session.setAttribute("domainName", domainName);
 
                 LOGGER.info("Trying to authenticate user {} by X-Auth-Username method", username);
-                processUsernamePasswordAuthentication(httpResponse, username, password);
+                processUsernamePasswordAuthentication(httpResponse, username, password, domainName);
                 return;
             }
 
@@ -189,8 +200,9 @@ public class AuthenticationFilter extends GenericFilterBean {
      * @param password to set
      * @throws IOException if any error occurs
      */
-    private void processUsernamePasswordAuthentication(HttpServletResponse httpResponse, Optional<String> username, Optional<String> password) throws IOException {
-        Authentication resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password);
+    private void processUsernamePasswordAuthentication(HttpServletResponse httpResponse, Optional<String> username,
+                                                       Optional<String> password, String domainName) throws IOException {
+        Authentication resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password, domainName);
         SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
         httpResponse.setStatus(HttpServletResponse.SC_OK);
         TokenResponse tokenResponse = new TokenResponse(resultOfAuthentication.getDetails().toString());
@@ -204,11 +216,34 @@ public class AuthenticationFilter extends GenericFilterBean {
      * Try to authenticate with username and password.
      * @param username to set
      * @param password to set
+     * @param domainName to set
      * @return Authentication
      */
-    private Authentication tryToAuthenticateWithUsernameAndPassword(Optional<String> username, Optional<String> password) {
-        UsernamePasswordAuthenticationToken requestAuthentication = new UsernamePasswordAuthenticationToken(username, password);
-        return tryToAuthenticate(requestAuthentication);
+    private Authentication tryToAuthenticateWithUsernameAndPassword(Optional<String> username, Optional<String> password,
+                                                                    String domainName) {
+        if(domainName == null || domainName.isEmpty()) {
+            //Authenticate application admin
+            BackendAdminUsernamePasswordAuthenticationToken backendAdminUsernamePasswordAuthenticationToken = new BackendAdminUsernamePasswordAuthenticationToken(username, password);
+            return tryToAuthenticate(backendAdminUsernamePasswordAuthenticationToken);
+        } else {
+            boolean authenticateByAd = true;
+            Authentication authentication = null;
+            if(authenticateByAd) {
+                //Active directory authenticated first
+                ActiveDirectoryAuthenticationWithToken requestAuthentication = new ActiveDirectoryAuthenticationWithToken(username, password);
+                requestAuthentication.setDomain(domainName);
+                authentication = tryToAuthenticate(requestAuthentication);
+            }
+
+            if(!authenticateByAd || (authenticateByAd && !authentication.isAuthenticated())) { //If AD authentication fail, DB auth provider called
+                DomainUsernamePasswordWithToken domainUsernamePasswordWithToken = new DomainUsernamePasswordWithToken(username, password);
+                domainUsernamePasswordWithToken.setDomain(domainName);
+                authentication = tryToAuthenticate(domainUsernamePasswordWithToken);
+            }
+
+            return authentication;
+        }
+
     }
 
     /**
@@ -237,9 +272,9 @@ public class AuthenticationFilter extends GenericFilterBean {
      */
     private Authentication tryToAuthenticate(Authentication requestAuthentication) {
         Authentication responseAuthentication = authenticationManager.authenticate(requestAuthentication);
-        if (responseAuthentication == null || !responseAuthentication.isAuthenticated()) {
-            throw new InternalAuthenticationServiceException("Unable to authenticate Domain User for provided credentials");
-        }
+//        if (responseAuthentication == null || !responseAuthentication.isAuthenticated()) {
+//            throw new BadCredentialsException("Unable to authenticate Domain User for provided credentials");
+//        }
         LOGGER.debug("User successfully authenticated");
         return responseAuthentication;
     }

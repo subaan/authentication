@@ -209,7 +209,7 @@ public class UserControllerTest {
     @Test
     public void create() {
         try {
-            User mockUser = this.buildMockUser();
+            User mockUser = buildMockUser();
             BDDMockito.when(mockUserService.create(any(User.class)))
                     .thenReturn(mockUser);
 
@@ -241,7 +241,7 @@ public class UserControllerTest {
     @Test
     public void update() {
         try {
-            User mockUser = this.buildMockUser();
+            User mockUser = buildMockUser();
             mockUser.setLastModifiedDateTime(new Date());
             mockUser.setUpdatedBy(1L);
             BDDMockito.when(mockUserService.update(any(User.class)))
@@ -309,6 +309,8 @@ public class UserControllerTest {
                 responseFields(
                         fieldWithPath("[].id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("[].username").description(messageByLocaleService.getMessage("user.username.description")),
+                        fieldWithPath("[].firstName").description(messageByLocaleService.getMessage("user.first.name.description")),
+                        fieldWithPath("[].lastName").description(messageByLocaleService.getMessage("user.last.name.description")),
                         fieldWithPath("[].emailId").description(messageByLocaleService.getMessage("user.emailId.description")),
                         fieldWithPath("[].domain.id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("[].domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
@@ -363,6 +365,8 @@ public class UserControllerTest {
                 responseFields(
                         fieldWithPath("id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("username").description(messageByLocaleService.getMessage("user.username.description")),
+                        fieldWithPath("firstName").description(messageByLocaleService.getMessage("user.first.name.description")),
+                        fieldWithPath("lastName").description(messageByLocaleService.getMessage("user.last.name.description")),
                         fieldWithPath("emailId").description(messageByLocaleService.getMessage("user.emailId.description")),
                         fieldWithPath("domain.id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
@@ -416,6 +420,8 @@ public class UserControllerTest {
         this.document.snippets(
                 requestFields(
                         fieldWithPath("username").description(messageByLocaleService.getMessage("user.username.description")),
+                        fieldWithPath("firstName").description(messageByLocaleService.getMessage("user.first.name.description")),
+                        fieldWithPath("lastName").description(messageByLocaleService.getMessage("user.last.name.description")),
                         fieldWithPath("emailId").description(messageByLocaleService.getMessage("user.emailId.description")),
                         fieldWithPath("password").description("The user password."),
                         fieldWithPath("domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
@@ -465,6 +471,8 @@ public class UserControllerTest {
 
         JsonObject requestUser = Json.createObjectBuilder()
                 .add("username", "username-X")
+                .add("firstName", "firstname-X")
+                .add("lastName", "lastname-X")
                 .add("password", "passw0rd")
                 .add("emailId", "username-x@example.com")
                 .add("domain", this.buildMockDomainRequest())
@@ -481,13 +489,15 @@ public class UserControllerTest {
      *
      * @return the user object.
      */
-    public User buildMockUser() {
+    public static User buildMockUser() {
 
         User userX = new User();
         userX.setId(1L);
         userX.setUsername("username-x");
+        userX.setFirstName("Firstname-X");
+        userX.setLastName("Lastname-X");
         userX.setEmailId("username-x@example.com");
-        userX.setDomain(this.buildMockDomain());
+        userX.setDomain(buildMockDomain());
         userX.setStatus(User.UserStatus.ENABLED);
         userX.setType(User.UserType.DOMAIN_ADMIN);
         userX.setCreatedDateTime(new Date());
@@ -500,17 +510,19 @@ public class UserControllerTest {
      * Build mock list of user.
      * @return mock list of user.
      */
-    private List<User> buildMockUserList() {
+    public static List<User> buildMockUserList() {
 
         List<User> users = new ArrayList<User>();
-        User userX = this.buildMockUser();
+        User userX = buildMockUser();
         users.add(userX);
 
         User userY = new User();
         userY.setId(3L);
         userY.setUsername("username-Y");
+        userY.setFirstName("Firstname-Y");
+        userY.setLastName("Lastname-Y");
         userY.setEmailId("username-Y@example.com");
-        userY.setDomain(this.buildMockDomain());
+        userY.setDomain(buildMockDomain());
         userY.setStatus(User.UserStatus.ENABLED);
         userY.setType(User.UserType.DOMAIN_USER);
         userY.setCreatedDateTime(new Date());
@@ -536,24 +548,8 @@ public class UserControllerTest {
      * Build mock data.
      * @return the domain object.
      */
-    private Domain buildMockDomain() {
-
-        Domain domain = new Domain();
-        domain.setId(1L);
-        domain.setAliasName("Domain-X");
-        domain.setOrganisationName("Organisation-X");
-        domain.setEmailId("username-x@domainx.com");
-        domain.setBillingEmailId("organisation-x@domainx.com");
-        domain.setStreetAddress("No.4 example street");
-        domain.setState("X-State");
-        domain.setCity("X-City");
-        domain.setCountry("X-country");
-        domain.setZipCode("546789");
-        domain.setPhoneNumber("9879678546");
-        domain.setStatus(Domain.DomainStatus.ACTIVE);
-        domain.setCreatedDateTime(new Date());
-
-        return domain;
+    private static Domain buildMockDomain() {
+        return DomainControllerTest.buildMockDomain();
     }
 
 }

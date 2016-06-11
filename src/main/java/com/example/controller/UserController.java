@@ -4,6 +4,7 @@ import com.example.constants.GenericConstants;
 import com.example.model.Domain;
 import com.example.model.User;
 import com.example.repository.DomainRepository;
+import com.example.service.ActiveDirectoryService;
 import com.example.service.DomainService;
 import com.example.service.UserService;
 import com.example.util.domain.vo.PagingAndSorting;
@@ -11,6 +12,8 @@ import com.example.util.web.ApiController;
 import com.example.util.web.CRUDController;
 import com.example.util.web.SortingUtil;
 import com.example.vo.UserVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.InvalidNameException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -32,6 +36,9 @@ import java.util.List;
 @Component
 public class UserController extends CRUDController<User> implements ApiController {
 
+    /** Logger constant. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
     /**
      * Auto wired userService.
      */
@@ -43,6 +50,12 @@ public class UserController extends CRUDController<User> implements ApiControlle
      */
     @Autowired
     private DomainService domainService;
+
+    /**
+     * Auto wired activeDirectoryService.
+     */
+    @Autowired
+    private ActiveDirectoryService activeDirectoryService;
 
     /**
      * Auto wired domainRepository.
@@ -238,6 +251,15 @@ public class UserController extends CRUDController<User> implements ApiControlle
         //Soft delete the user
         user.setDeleted(true);
         userService.update(user);
+    }
+
+    @RequestMapping(value="/ldap", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseStatus(HttpStatus.OK)
+    public User getLdapUser(@RequestParam String username, @RequestParam Long domainId)throws InvalidNameException {
+        LOGGER.info("Ldap User call ");
+        activeDirectoryService.findAll(domainId);
+        activeDirectoryService.authenticate();
+        return activeDirectoryService.findByUsername(username, domainId);
     }
 
 }

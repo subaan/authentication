@@ -17,7 +17,10 @@ import com.google.common.base.Optional;
 public class BackendAdminUsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
     /** Invalid credentials constant. */
-    public static final String INVALID_BACKEND_ADMIN_CREDENTIALS = "Invalid Backend Admin Credentials";
+    public static final String INVALID_BACKEND_ADMIN_CREDENTIALS = "Invalid Credentials";
+
+    /** Token service attribute. */
+    private TokenService tokenService;
 
     /** Admin username. */
     @Value("${backend.admin.username}")
@@ -26,6 +29,14 @@ public class BackendAdminUsernamePasswordAuthenticationProvider implements Authe
     /** Admin password. */
     @Value("${backend.admin.password}")
     private String backendAdminPassword;
+
+    /**
+     * Parameterized constructor.
+     * @param tokenService to set
+     */
+    public BackendAdminUsernamePasswordAuthenticationProvider(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -38,8 +49,12 @@ public class BackendAdminUsernamePasswordAuthenticationProvider implements Authe
             throw new BadCredentialsException(INVALID_BACKEND_ADMIN_CREDENTIALS);
         }
 
-        return new UsernamePasswordAuthenticationToken(username.get(), null,
+        AuthenticationWithToken authenticationWithToken = new AuthenticationWithToken(username.get(), null,
                 AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_BACKEND_ADMIN"));
+        String newToken = tokenService.generateNewToken();
+        authenticationWithToken.setToken(newToken);
+        tokenService.store(newToken, authenticationWithToken);
+        return authenticationWithToken;
     }
 
     /**

@@ -354,6 +354,8 @@ public class AuthControllerTest {
                 responseFields(
                         fieldWithPath("id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("username").description(messageByLocaleService.getMessage("user.username.description")),
+                        fieldWithPath("firstName").description(messageByLocaleService.getMessage("user.first.name.description")),
+                        fieldWithPath("lastName").description(messageByLocaleService.getMessage("user.last.name.description")),
                         fieldWithPath("emailId").description(messageByLocaleService.getMessage("user.emailId.description")),
                         fieldWithPath("domain.id").description(messageByLocaleService.getMessage("common.id.description")),
                         fieldWithPath("domain.aliasName").description(messageByLocaleService.getMessage("domain.aliasName.description")),
@@ -406,18 +408,7 @@ public class AuthControllerTest {
      * @return the user object.
      */
     public User buildMockUser() {
-
-        User userX = new User();
-        userX.setId(1L);
-        userX.setUsername("username-x");
-        userX.setEmailId("username-x@example.com");
-        userX.setDomain(this.buildMockDomain());
-        userX.setStatus(User.UserStatus.ENABLED);
-        userX.setType(User.UserType.DOMAIN_ADMIN);
-        userX.setCreatedDateTime(new Date());
-        userX.setCreatedBy(1L);
-
-        return userX;
+        return UserControllerTest.buildMockUser();
     }
 
     /**
@@ -425,23 +416,7 @@ public class AuthControllerTest {
      * @return the domain object.
      */
     private Domain buildMockDomain() {
-
-        Domain domain = new Domain();
-        domain.setId(1L);
-        domain.setAliasName("Domain-X");
-        domain.setOrganisationName("Organisation-X");
-        domain.setEmailId("username-x@domainx.com");
-        domain.setBillingEmailId("organisation-x@domainx.com");
-        domain.setStreetAddress("No.4 example street");
-        domain.setState("X-State");
-        domain.setCity("X-City");
-        domain.setCountry("X-country");
-        domain.setZipCode("546789");
-        domain.setPhoneNumber("9879678546");
-        domain.setStatus(Domain.DomainStatus.ACTIVE);
-        domain.setCreatedDateTime(new Date());
-
-        return domain;
+        return DomainControllerTest.buildMockDomain();
     }
 
 }
